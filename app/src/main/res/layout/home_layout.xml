@@ -49,7 +49,7 @@
         android:textColor="@color/colorDark"/>
 
     <ListView
-        android:id="@+id/list"
+        android:id="@+id/expenseListView"
         android:layout_width="wrap_content"
         android:layout_height="300dp"
         android:layout_marginBottom="8dp"
@@ -69,7 +69,7 @@
         android:layout_marginRight="32dp"
         android:text="Total spent: N/A"
         android:textSize="18sp"
-        app:layout_constraintTop_toBottomOf="@id/list"
+        app:layout_constraintTop_toBottomOf="@id/expenseListView"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/newEntryButton"
         android:textColor="@color/colorDark"/>
