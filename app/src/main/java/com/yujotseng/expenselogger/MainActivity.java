@@ -1,6 +1,8 @@
 package com.yujotseng.expenselogger;
 
+import android.database.Cursor;
 import android.support.annotation.NonNull;
+import android.support.constraint.solver.ArrayLinkedVariables;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -10,6 +12,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,11 +37,10 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView);
 
-        // BottomNavView item click listener
+        // Add bottomNavView item click listener
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
                 switch (item.getItemId()) {
                     case R.id.action_home:
                         switchFragment(0);
@@ -46,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
                         switchFragment(3);
                         return true;
                 }
-
                 return false;
             }
         });
@@ -66,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         sectionsPagerAdapter.addFragment(new CalendarFragment());
         sectionsPagerAdapter.addFragment(new AnalysisFragment());
         sectionsPagerAdapter.addFragment(new SettingsFragment());
+        sectionsPagerAdapter.addFragment(new NewEntryFragment());
     }
 
     private void switchFragment(int pos) {
