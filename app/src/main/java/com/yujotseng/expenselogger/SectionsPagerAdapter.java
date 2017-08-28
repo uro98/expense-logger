@@ -13,7 +13,7 @@ import java.util.List;
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-    private List<Fragment> fragmentsList = new ArrayList<Fragment>(4);
+    private List<Fragment> fragmentsList = new ArrayList<Fragment>(5);
 
     public SectionsPagerAdapter(FragmentManager fm) {
         super(fm);
