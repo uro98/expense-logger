@@ -21,7 +21,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements HomeFragment.OnListItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements HomeFragment.PassDataListener {
 
     private static final String TAG = "MainActivity";
 
@@ -83,18 +83,33 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnLi
         transaction.commit();
     }
 
-    public void onListItemSelected(long id, String name) {
-        ExpenseInfoFragment expenseInfoFragment = (ExpenseInfoFragment) getSupportFragmentManager().findFragmentByTag("ExpenseInfoFragment");
-        if (expenseInfoFragment == null) {
-            expenseInfoFragment = new ExpenseInfoFragment();
-        }
-        Bundle bundle = new Bundle();
-        bundle.putLong(expenseInfoFragment.EXPENSE_ID, id);
-        bundle.putString(expenseInfoFragment.EXPENSE_NAME, name);
-        expenseInfoFragment.setArguments(bundle);
+    public void passData(long id, boolean toView) {
+        if (toView == true) {
+            ExpenseInfoFragment expenseInfoFragment = (ExpenseInfoFragment) getSupportFragmentManager().findFragmentByTag("ExpenseInfoFragment");
+            if (expenseInfoFragment == null) {
+                expenseInfoFragment = new ExpenseInfoFragment();
+            }
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragmentContainer, expenseInfoFragment);
-        transaction.commit();
+            Bundle bundle = new Bundle();
+            bundle.putLong(ExpenseInfoFragment.EXPENSE_ID, id);
+            expenseInfoFragment.setArguments(bundle);
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragmentContainer, expenseInfoFragment);
+            transaction.commit();
+        } else {
+            ModifyEntryFragment modifyEntryFragment = (ModifyEntryFragment) getSupportFragmentManager().findFragmentByTag("ModifyEntryFragment");
+            if (modifyEntryFragment == null) {
+                modifyEntryFragment = new ModifyEntryFragment();
+            }
+
+            Bundle bundle = new Bundle();
+            bundle.putLong(ModifyEntryFragment.EXPENSE_ID, id);
+            modifyEntryFragment.setArguments(bundle);
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragmentContainer, modifyEntryFragment);
+            transaction.commit();
+        }
     }
 }

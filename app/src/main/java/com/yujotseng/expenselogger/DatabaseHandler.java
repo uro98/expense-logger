@@ -49,7 +49,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         sqLiteDatabase.delete(TABLE_EXPENSE, COLUMN_ID + " = " + _id, null);
     }
 
-    public int updateExpense(int _id, String name) {
+    public int updateExpense(long _id, String name) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
@@ -60,7 +60,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public Cursor getExpense(String name) {
-        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
 
         String[] projection = {
                 COLUMN_ID,
@@ -68,6 +68,25 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         };
 
         String selection = COLUMN_NAME + " = '" + name + "'";
+
+        Cursor cursor = sqLiteDatabase.query(TABLE_EXPENSE, projection, selection, null, null, null, null);
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+
+        return cursor;
+    }
+
+    public Cursor getExpense(long _id) {
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+
+        String[] projection = {
+                COLUMN_ID,
+                COLUMN_NAME
+        };
+
+        String selection = COLUMN_ID + " = " + _id;
 
         Cursor cursor = sqLiteDatabase.query(TABLE_EXPENSE, projection, selection, null, null, null, null);
 

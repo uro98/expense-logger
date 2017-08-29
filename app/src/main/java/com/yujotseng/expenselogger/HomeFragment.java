@@ -31,10 +31,10 @@ public class HomeFragment extends Fragment {
     private Fragment fragment;
     private DatabaseHandler databaseHandler;
     private ListView expenseListView;
-    private OnListItemSelectedListener callback;
+    private PassDataListener callback;
 
-    public interface OnListItemSelectedListener {
-        public void onListItemSelected(long id, String name);
+    public interface PassDataListener {
+        public void passData(long id, boolean toView);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class HomeFragment extends Fragment {
         super.onAttach(context);
         // Make sure host activity implements OnListItemSelectedListener interface, otherwise throw exception
         try {
-            callback = (OnListItemSelectedListener) context;
+            callback = (PassDataListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement OnListItemSelectedListener");
         }
@@ -56,19 +56,21 @@ public class HomeFragment extends Fragment {
         // Instantiate database
         databaseHandler = new DatabaseHandler(getActivity(), null, null, 1);
 
+        // Get UI
         newEntryButton = (Button) view.findViewById(R.id.newEntryButton);
+        expenseListView = (ListView) view.findViewById(R.id.expenseListView);
 
+        // Get NewEntryFragment
         fragment = getFragmentManager().findFragmentByTag("NewEntryFragment");
-
         if(fragment == null) {
             fragment = new NewEntryFragment();
         }
 
-        expenseListView = (ListView) view.findViewById(R.id.expenseListView);
-
+        // Set button onClickListener
         newEntryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Go to NewEntryFragment
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragmentContainer, fragment);
                 transaction.commit();
@@ -99,8 +101,7 @@ public class HomeFragment extends Fragment {
         expenseListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String expenseName = ((TextView) view.findViewById(R.id.expenseName)).getText().toString();
-                callback.onListItemSelected(l, expenseName);
+                callback.passData(l, true);
 
 //                Cursor item = (Cursor) reminderCursorAdapter.getItem(position);
 //                Log.d("Clicked item field", " "+ item.getColumn(your column index));

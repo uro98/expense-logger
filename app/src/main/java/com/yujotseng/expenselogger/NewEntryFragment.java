@@ -29,16 +29,17 @@ public class NewEntryFragment extends Fragment {
         // Instantiate database
         databaseHandler = new DatabaseHandler(getActivity(), null, null, 1);
 
+        // Get UI
+        expenseNameInput = (EditText) view.findViewById(R.id.expenseNameInput);
         saveButton = (Button) view.findViewById(R.id.saveButton);
 
-        expenseNameInput = (EditText) view.findViewById(R.id.expenseNameInput);
-
+        // Get HomeFragment
         fragment = getFragmentManager().findFragmentByTag("HomeFragment");
-
         if(fragment == null) {
             fragment = new HomeFragment();
         }
 
+        // Set button onClickListener
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,11 +63,7 @@ public class NewEntryFragment extends Fragment {
     private void saveButtonClicked() {
         if (expenseNameInput.length() != 0) {
             Expense expense = new Expense(expenseNameInput.getText().toString());
-            if (expense != null) {
-                databaseHandler.addExpense(expense);
-            } else {
-                Toast.makeText(getActivity(),"Object null", Toast.LENGTH_SHORT).show();
-            }
+            databaseHandler.addExpense(expense);
         } else {
             Toast.makeText(getActivity(),"You must put something in the text field!", Toast.LENGTH_SHORT).show();
         }

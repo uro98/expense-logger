@@ -1,5 +1,7 @@
 package com.yujotseng.expenselogger;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,16 +18,15 @@ import android.widget.Toast;
 public class ExpenseInfoFragment extends Fragment {
     private static final String TAG = "ExpenseInfoFragment";
 
-    public final static String EXPENSE_ID = "id";
-    public final static String EXPENSE_NAME = "name";
+    public final static String EXPENSE_ID = "_id";
     
     private View view;
-    private Button editButton;
-    private Button deleteButton;
     private TextView expenseNameDetail;
     private DatabaseHandler databaseHandler;
-    private Fragment fragment;
+    private Fragment homeFragment;
+    private Fragment modifyEntryFragment;
     private long _id;
+    private HomeFragment.PassDataListener callback;
 
 
     @Nullable
@@ -36,25 +37,38 @@ public class ExpenseInfoFragment extends Fragment {
         // Instantiate database
         databaseHandler = new DatabaseHandler(getActivity(), null, null, 1);
 
-        editButton = (Button) view.findViewById(R.id.editButton);
-        deleteButton = (Button) view.findViewById(R.id.deleteButton);
+        // Get UI
+        Button editButton = view.findViewById(R.id.editButton);
+        Button deleteButton = view.findViewById(R.id.deleteButton);
+        expenseNameDetail = view.findViewById(R.id.expenseNameDetail);
 
-        expenseNameDetail = (TextView) view.findViewById(R.id.expenseNameDetail);
-
-        fragment = getFragmentManager().findFragmentByTag("HomeFragment");
-
-        if(fragment == null) {
-            fragment = new HomeFragment();
+        // Get Fragments
+        homeFragment = getFragmentManager().findFragmentByTag("HomeFragment");
+        if(homeFragment == null) {
+            homeFragment = new HomeFragment();
         }
 
+        modifyEntryFragment = getFragmentManager().findFragmentByTag("ModifyEntryFragment");
+        if(modifyEntryFragment == null) {
+            modifyEntryFragment = new ModifyEntryFragment();
+        }
+
+        // Set buttons onClickListeners
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // delete expense and return to HomeFragment
                 deleteButtonClicked();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragmentContainer, fragment);
+                transaction.replace(R.id.fragmentContainer, homeFragment);
                 transaction.commit();
+            }
+        });
+
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                callback.passData(_id, false);
             }
         });
 
@@ -66,8 +80,22 @@ public class ExpenseInfoFragment extends Fragment {
         super.onStart();
         Bundle bundle = getArguments();
         if (bundle != null) {
-            expenseNameDetail.setText(bundle.getString(EXPENSE_NAME));
-            _id = bundle.getLong(EXPENSE_ID);
+            _id = bundle.getLong(EXPENSE_ID);                   // Get ID
+            Cursor cursor = databaseHandler.getExpense(_id);    // Get cursor from ID
+            int nameIndex = cursor.getColumnIndex("_name");     // Get expense properties from ID
+            String name = cursor.getString(nameIndex);
+            expenseNameDetail.setText(name);                    // Populate TextViews with properties
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        // Make sure host activity implements OnListItemSelectedListener interface, otherwise throw exception
+        try {
+            callback = (HomeFragment.PassDataListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement OnListItemSelectedListener");
         }
     }
 
