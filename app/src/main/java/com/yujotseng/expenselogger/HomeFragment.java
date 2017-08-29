@@ -1,5 +1,6 @@
 package com.yujotseng.expenselogger;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -16,6 +17,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -27,6 +31,22 @@ public class HomeFragment extends Fragment {
     private Fragment fragment;
     private DatabaseHandler databaseHandler;
     private ListView expenseListView;
+    private OnListItemSelectedListener callback;
+
+    public interface OnListItemSelectedListener {
+        public void onListItemSelected(long id, String name);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        // Make sure host activity implements OnListItemSelectedListener interface, otherwise throw exception
+        try {
+            callback = (OnListItemSelectedListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement OnListItemSelectedListener");
+        }
+    }
 
     @Nullable
     @Override
@@ -55,7 +75,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        populateListView();
+        populateListView("apple");
 
         return view;
     }
@@ -67,23 +87,23 @@ public class HomeFragment extends Fragment {
         view = null;
     }
 
-    public void populateListView() {
+    private void populateListView(String name) {
         // Get expense and append to ArrayList
-        Cursor cursor = databaseHandler.getExpense();
-        ArrayList<String> expenseList = new ArrayList<>();
-        while(cursor.moveToNext()) {
-            // Get value from column 1 and add to List
-            expenseList.add(cursor.getString(1));
-        }
+        Cursor cursor = databaseHandler.getExpense(name);
+
         // Create and set List Adapter
-        ListAdapter listAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, expenseList);
-        expenseListView.setAdapter(listAdapter);
+        ExpenseListAdapter expenseListAdapter = new ExpenseListAdapter(getActivity(), cursor);
+        expenseListView.setAdapter(expenseListAdapter);
 
         // Add onItemClickListener to ListView
         expenseListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String name = adapterView.getItemAtPosition(i).toString();
+                String expenseName = ((TextView) view.findViewById(R.id.expenseName)).getText().toString();
+                callback.onListItemSelected(l, expenseName);
+
+//                Cursor item = (Cursor) reminderCursorAdapter.getItem(position);
+//                Log.d("Clicked item field", " "+ item.getColumn(your column index));
             }
         });
     }

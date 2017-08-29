@@ -7,4 +7,7 @@
     <color name="colorAccent">#448AFF</color>
     <color name="colorDark">#001616</color>
     <color name="colorLight">#00BF9A</color>
+    <color name="colorOdd">#fff</color>
+    <color name="colorEven">#D0F0C0</color>
+
 </resources>

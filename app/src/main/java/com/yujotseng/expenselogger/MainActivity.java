@@ -21,7 +21,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements HomeFragment.OnListItemSelectedListener {
 
     private static final String TAG = "MainActivity";
 
@@ -80,6 +80,21 @@ public class MainActivity extends AppCompatActivity {
     private void switchFragment(int pos) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragmentContainer, sectionsPagerAdapter.getItem(pos));
+        transaction.commit();
+    }
+
+    public void onListItemSelected(long id, String name) {
+        ExpenseInfoFragment expenseInfoFragment = (ExpenseInfoFragment) getSupportFragmentManager().findFragmentByTag("ExpenseInfoFragment");
+        if (expenseInfoFragment == null) {
+            expenseInfoFragment = new ExpenseInfoFragment();
+        }
+        Bundle bundle = new Bundle();
+        bundle.putLong(expenseInfoFragment.EXPENSE_ID, id);
+        bundle.putString(expenseInfoFragment.EXPENSE_NAME, name);
+        expenseInfoFragment.setArguments(bundle);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragmentContainer, expenseInfoFragment);
         transaction.commit();
     }
 }

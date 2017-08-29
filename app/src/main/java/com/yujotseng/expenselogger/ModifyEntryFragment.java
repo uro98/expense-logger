@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class NewEntryFragment extends Fragment {
+public class ModifyEntryFragment extends Fragment {
     private static final String TAG = "NewEntryFragment";
     
     private View view;

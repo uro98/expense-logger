@@ -9,10 +9,11 @@ import android.support.design.widget.TabLayout;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "expense.db";
 
     public static final String TABLE_EXPENSE = "expense";
+
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_NAME = "_name";
 
@@ -43,16 +44,37 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         sqLiteDatabase.insert(TABLE_EXPENSE, null, contentValues);
     }
 
-    public void deleteExpense(Expense expense) {
+    public void deleteExpense(long _id) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
-        sqLiteDatabase.execSQL("DELETE FROM " + TABLE_EXPENSE +
-        " WHERE " + COLUMN_ID + " = " + expense.getId() + ";");
+        sqLiteDatabase.delete(TABLE_EXPENSE, COLUMN_ID + " = " + _id, null);
     }
 
-    public Cursor getExpense() {
+    public int updateExpense(int _id, String name) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_EXPENSE;
-        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_NAME, name);
+
+        int i = sqLiteDatabase.update(TABLE_EXPENSE, contentValues, COLUMN_ID + " = " + _id, null);
+        return i;
+    }
+
+    public Cursor getExpense(String name) {
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+
+        String[] projection = {
+                COLUMN_ID,
+                COLUMN_NAME
+        };
+
+        String selection = COLUMN_NAME + " = '" + name + "'";
+
+        Cursor cursor = sqLiteDatabase.query(TABLE_EXPENSE, projection, selection, null, null, null, null);
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+
         return cursor;
     }
 }
