@@ -9,5 +9,6 @@
     <color name="colorLight">#00BF9A</color>
     <color name="colorOdd">#fff</color>
     <color name="colorEven">#D0F0C0</color>
+    <color name="colorGrey">#2a3439</color>
 
 </resources>

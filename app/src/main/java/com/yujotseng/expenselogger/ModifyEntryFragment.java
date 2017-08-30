@@ -79,7 +79,7 @@ public class ModifyEntryFragment extends Fragment {
             Cursor cursor = databaseHandler.getExpense(_id);    // Get cursor from ID
             int nameIndex = cursor.getColumnIndex("_name");     // Get expense properties from ID
             String name = cursor.getString(nameIndex);
-            expenseNameUpdateInput.setText(name);                    // Populate EditViews with properties
+            expenseNameUpdateInput.setText(name);               // Populate EditViews with properties
         }
     }
 

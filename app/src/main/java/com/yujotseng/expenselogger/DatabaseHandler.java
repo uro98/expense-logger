@@ -38,9 +38,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public void addExpense(Expense expense) {
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_NAME, expense.getName());
-        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         sqLiteDatabase.insert(TABLE_EXPENSE, null, contentValues);
     }
 

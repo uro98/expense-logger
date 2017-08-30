@@ -59,6 +59,7 @@ public class HomeFragment extends Fragment {
         // Get UI
         newEntryButton = (Button) view.findViewById(R.id.newEntryButton);
         expenseListView = (ListView) view.findViewById(R.id.expenseListView);
+        expenseListView.setEmptyView(view.findViewById(R.id.emptyListView));
 
         // Get NewEntryFragment
         fragment = getFragmentManager().findFragmentByTag("NewEntryFragment");

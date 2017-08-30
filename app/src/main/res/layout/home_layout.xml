@@ -59,6 +59,19 @@
         </ListView>
 
         <TextView
+            android:id="@+id/emptyListView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:text="No entries found"
+            android:textSize="18sp"
+            android:textColor="@color/colorDark"
+            android:layout_weight="82"
+            android:gravity="center"
+            android:visibility="gone"/>
+
+        <TextView
             android:id="@+id/totalSpent"
             android:layout_width="match_parent"
             android:layout_height="0dp"
