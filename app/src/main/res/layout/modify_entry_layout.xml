@@ -42,6 +42,16 @@
 
     </LinearLayout>
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/expenseNoteUpdateInput"
+        android:hint="Expense note"
+        android:inputType="textAutoCorrect"
+        android:ems="10"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"/>
+
     <Button
         android:id="@+id/cancelButton"
         android:layout_width="wrap_content"

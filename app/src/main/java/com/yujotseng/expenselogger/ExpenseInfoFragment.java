@@ -23,6 +23,7 @@ public class ExpenseInfoFragment extends Fragment {
     private View view;
     private TextView expenseNameDetail;
     private TextView expenseDateDetail;
+    private TextView expenseNoteDetail;
     private DatabaseHandler databaseHandler;
     private Fragment homeFragment;
     private Fragment modifyEntryFragment;
@@ -43,6 +44,7 @@ public class ExpenseInfoFragment extends Fragment {
         Button deleteButton = view.findViewById(R.id.deleteButton);
         expenseNameDetail = view.findViewById(R.id.expenseNameDetail);
         expenseDateDetail = view.findViewById(R.id.expenseDateDetail);
+        expenseNoteDetail = view.findViewById(R.id.expenseNoteDetail);
 
         // Get Fragments
         homeFragment = getFragmentManager().findFragmentByTag("HomeFragment");
@@ -89,9 +91,17 @@ public class ExpenseInfoFragment extends Fragment {
             String name = cursor.getString(nameIndex);
             int dateIndex = cursor.getColumnIndex("_date");
             String date = cursor.getString(dateIndex);
+            int noteIndex = cursor.getColumnIndex("_note");
+            String note;
+            if (cursor.isNull(noteIndex)) {
+                note = "";
+            } else {
+                note = cursor.getString(noteIndex);
+            }
 
             expenseNameDetail.setText(name);                    // Populate TextViews with properties
             expenseDateDetail.setText(date);
+            expenseNoteDetail.setText(note);
         }
     }
 

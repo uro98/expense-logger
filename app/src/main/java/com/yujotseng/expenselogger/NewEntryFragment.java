@@ -26,6 +26,7 @@ public class NewEntryFragment extends Fragment {
     private Button expenseDateInputButton;
     private EditText expenseNameInput;
     private TextView expenseDateInput;
+    private EditText expenseNoteInput;
     private DatePickerDialog.OnDateSetListener onDateSetListener;
     private DatabaseHandler databaseHandler;
     private Fragment fragment;
@@ -42,6 +43,7 @@ public class NewEntryFragment extends Fragment {
         expenseNameInput = (EditText) view.findViewById(R.id.expenseNameInput);
         expenseDateInput = (TextView) view.findViewById(R.id.expenseDateInput);
         expenseDateInputButton = (Button) view.findViewById(R.id.expenseDateInputButton);
+        expenseNoteInput = (EditText) view.findViewById(R.id.expenseNoteInput);
         saveButton = (Button) view.findViewById(R.id.saveButton);
 
         // Get HomeFragment
@@ -99,7 +101,10 @@ public class NewEntryFragment extends Fragment {
 
     private void saveButtonClicked() {
         if (expenseNameInput.length() != 0) {
-            Expense expense = new Expense(expenseNameInput.getText().toString(), expenseDateInput.getText().toString());
+            Expense expense = new Expense(
+                    expenseNameInput.getText().toString(),
+                    expenseDateInput.getText().toString(),
+                    expenseNoteInput.getText().toString());
             databaseHandler.addExpense(expense);
         } else {
             Toast.makeText(getActivity(),"You must put something in the text field!", Toast.LENGTH_SHORT).show();

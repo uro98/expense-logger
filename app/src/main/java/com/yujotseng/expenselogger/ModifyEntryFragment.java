@@ -31,6 +31,7 @@ public class ModifyEntryFragment extends Fragment {
     private Button cancelButton;
     private EditText expenseNameUpdateInput;
     private TextView expenseDateUpdateInput;
+    private EditText expenseNoteUpdateInput;
     private DatabaseHandler databaseHandler;
     private Fragment fragment;
     private long _id;
@@ -48,6 +49,7 @@ public class ModifyEntryFragment extends Fragment {
         expenseNameUpdateInput = (EditText) view.findViewById(R.id.expenseNameUpdateInput);
         expenseDateUpdateInput = (TextView)  view.findViewById(R.id.expenseDateUpdateInput);
         expenseDateUpdateInputButton = (Button) view.findViewById(R.id.expenseDateUpdateInputButton);
+        expenseNoteUpdateInput = (EditText) view.findViewById(R.id.expenseNoteUpdateInput);
         saveUpdateButton = (Button) view.findViewById(R.id.saveUpdateButton);
         cancelButton = (Button) view.findViewById(R.id.cancelButton);
 
@@ -120,9 +122,17 @@ public class ModifyEntryFragment extends Fragment {
             String name = cursor.getString(nameIndex);
             int dateIndex = cursor.getColumnIndex("_date");
             String date = cursor.getString(dateIndex);
+            int noteIndex = cursor.getColumnIndex("_note");
+            String note;
+            if (cursor.isNull(noteIndex)) {
+                note = "";
+            } else {
+                note = cursor.getString(noteIndex);
+            }
 
             expenseNameUpdateInput.setText(name);               // Populate EditViews with properties
             expenseDateUpdateInput.setText(date);
+            expenseNoteUpdateInput.setText(note);
         }
     }
 
@@ -134,7 +144,11 @@ public class ModifyEntryFragment extends Fragment {
 
     private void saveUpdateButtonClicked() {
         if (expenseNameUpdateInput.length() != 0) {
-            databaseHandler.updateExpense(_id, expenseNameUpdateInput.getText().toString(), expenseDateUpdateInput.getText().toString());
+            databaseHandler.updateExpense(
+                    _id,
+                    expenseNameUpdateInput.getText().toString(),
+                    expenseDateUpdateInput.getText().toString(),
+                    expenseNoteUpdateInput.getText().toString());
         } else {
             Toast.makeText(getActivity(),"You must put something in the text field!", Toast.LENGTH_SHORT).show();
         }

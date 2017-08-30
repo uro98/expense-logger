@@ -7,15 +7,15 @@ public class Expense {
 //    private double amount;
 //    private String category;
     private String date;
-//    private String note;
+    private String note;
 
     //public Expense(String name, double amount, String category, String date, String time, String note) {
-    public Expense(String name, String date) {
+    public Expense(String name, String date, String note) {
         this.name = name;
 //        this.amount = amount;
 //        this.category = category;
         this.date = date;
-//        this.note = note;
+        this.note = note;
     }
 
     public int getId() {
@@ -58,11 +58,11 @@ public class Expense {
         this.date = date;
     }
 //
-//    public String getNote() {
-//        return note;
-//    }
-//
-//    public void setNote(String note) {
-//        this.note = note;
-//    }
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
 }

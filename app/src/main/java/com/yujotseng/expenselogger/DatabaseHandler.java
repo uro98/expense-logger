@@ -9,7 +9,7 @@ import android.support.design.widget.TabLayout;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "expense.db";
 
     public static final String TABLE_EXPENSE = "expense";
@@ -17,11 +17,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_NAME = "_name";
     public static final String COLUMN_DATE = "_date";
+    public static final String COLUMN_NOTE = "_note";
 
     private static final String CREATE_TABLE = "CREATE TABLE " + TABLE_EXPENSE + " (" +
             COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_NAME + " TEXT NOT NULL, " +
-            COLUMN_DATE + " TEXT NOT NULL" +
+            COLUMN_DATE + " TEXT NOT NULL, " +
+            COLUMN_NOTE + " TEXT" +
             ");";
 
     public DatabaseHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -44,6 +46,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_NAME, expense.getName());
         contentValues.put(COLUMN_DATE, expense.getDate());
+        contentValues.put(COLUMN_NOTE, expense.getNote());
         sqLiteDatabase.insert(TABLE_EXPENSE, null, contentValues);
     }
 
@@ -52,17 +55,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         sqLiteDatabase.delete(TABLE_EXPENSE, COLUMN_ID + " = " + _id, null);
     }
 
-    public int updateExpense(long _id, String name, String date) {
+    public int updateExpense(long _id, String name, String date, String note) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_NAME, name);
         contentValues.put(COLUMN_DATE, date);
+        contentValues.put(COLUMN_NOTE, note);
 
         int i = sqLiteDatabase.update(TABLE_EXPENSE, contentValues, COLUMN_ID + " = " + _id, null);
         return i;
     }
 
+    // For ListView
     public Cursor getExpense(String date) {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
 
@@ -83,13 +88,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return cursor;
     }
 
+    // For expense detail
     public Cursor getExpense(long _id) {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
 
         String[] projection = {
                 COLUMN_ID,
                 COLUMN_NAME,
-                COLUMN_DATE
+                COLUMN_DATE,
+                COLUMN_NOTE
         };
 
         String selection = COLUMN_ID + " = " + _id;
