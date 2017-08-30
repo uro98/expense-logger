@@ -1,6 +1,9 @@
 package com.yujotseng.expenselogger;
 
+import android.app.DatePickerDialog;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,8 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Calendar;
 
 public class ModifyEntryFragment extends Fragment {
     private static final String TAG = "NewEntryFragment";
@@ -19,12 +26,15 @@ public class ModifyEntryFragment extends Fragment {
     public final static String EXPENSE_ID = "id";
     
     private View view;
+    private Button expenseDateUpdateInputButton;
     private Button saveUpdateButton;
     private Button cancelButton;
     private EditText expenseNameUpdateInput;
+    private TextView expenseDateUpdateInput;
     private DatabaseHandler databaseHandler;
     private Fragment fragment;
     private long _id;
+    private DatePickerDialog.OnDateSetListener onDateSetListener;
 
     @Nullable
     @Override
@@ -36,6 +46,8 @@ public class ModifyEntryFragment extends Fragment {
 
         // Get UI
         expenseNameUpdateInput = (EditText) view.findViewById(R.id.expenseNameUpdateInput);
+        expenseDateUpdateInput = (TextView)  view.findViewById(R.id.expenseDateUpdateInput);
+        expenseDateUpdateInputButton = (Button) view.findViewById(R.id.expenseDateUpdateInputButton);
         saveUpdateButton = (Button) view.findViewById(R.id.saveUpdateButton);
         cancelButton = (Button) view.findViewById(R.id.cancelButton);
 
@@ -46,6 +58,22 @@ public class ModifyEntryFragment extends Fragment {
         }
 
         // Set buttons onClickListeners
+        expenseDateUpdateInputButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar calendar = Calendar.getInstance();
+                // Get current year, month and day
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), android.R.style.Theme_Holo_Light_Dialog,
+                        onDateSetListener, year, month, day);
+                datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                datePickerDialog.show();
+            }
+        });
+
         saveUpdateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,6 +95,16 @@ public class ModifyEntryFragment extends Fragment {
             }
         });
 
+        // Set date listener
+        onDateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                month++; // since MONTH starts from 0
+                String date = day + "/" + month + "/" + year;
+                expenseDateUpdateInput.setText(date);
+            }
+        };
+
         return view;
     }
 
@@ -77,9 +115,14 @@ public class ModifyEntryFragment extends Fragment {
         if (bundle != null) {
             _id = bundle.getLong(EXPENSE_ID);                   // Get ID
             Cursor cursor = databaseHandler.getExpense(_id);    // Get cursor from ID
+
             int nameIndex = cursor.getColumnIndex("_name");     // Get expense properties from ID
             String name = cursor.getString(nameIndex);
+            int dateIndex = cursor.getColumnIndex("_date");
+            String date = cursor.getString(dateIndex);
+
             expenseNameUpdateInput.setText(name);               // Populate EditViews with properties
+            expenseDateUpdateInput.setText(date);
         }
     }
 
@@ -91,7 +134,7 @@ public class ModifyEntryFragment extends Fragment {
 
     private void saveUpdateButtonClicked() {
         if (expenseNameUpdateInput.length() != 0) {
-            databaseHandler.updateExpense(_id, expenseNameUpdateInput.getText().toString());
+            databaseHandler.updateExpense(_id, expenseNameUpdateInput.getText().toString(), expenseDateUpdateInput.getText().toString());
         } else {
             Toast.makeText(getActivity(),"You must put something in the text field!", Toast.LENGTH_SHORT).show();
         }

@@ -21,7 +21,9 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
@@ -32,6 +34,8 @@ public class HomeFragment extends Fragment {
     private DatabaseHandler databaseHandler;
     private ListView expenseListView;
     private PassDataListener callback;
+    private TextView date;
+    private Calendar calendar;
 
     public interface PassDataListener {
         public void passData(long id, boolean toView);
@@ -53,13 +57,20 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.home_layout, container, false);
 
+        // Get calendar
+        calendar = Calendar.getInstance();
+
         // Instantiate database
         databaseHandler = new DatabaseHandler(getActivity(), null, null, 1);
 
         // Get UI
+        date = (TextView) view.findViewById(R.id.date);
         newEntryButton = (Button) view.findViewById(R.id.newEntryButton);
         expenseListView = (ListView) view.findViewById(R.id.expenseListView);
         expenseListView.setEmptyView(view.findViewById(R.id.emptyListView));
+
+        // Set UI
+        date.setText(getTodayDate() + "\n" + getTodayDayOfWeek());
 
         // Get NewEntryFragment
         fragment = getFragmentManager().findFragmentByTag("NewEntryFragment");
@@ -78,7 +89,8 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        populateListView("apple");
+        Log.d(TAG, "onCreateView: " + getTodayDate());
+        populateListView(getTodayDate());
 
         return view;
     }
@@ -90,9 +102,9 @@ public class HomeFragment extends Fragment {
         view = null;
     }
 
-    private void populateListView(String name) {
+    private void populateListView(String date) {
         // Get expense and append to ArrayList
-        Cursor cursor = databaseHandler.getExpense(name);
+        Cursor cursor = databaseHandler.getExpense(date);
 
         // Create and set List Adapter
         ExpenseListAdapter expenseListAdapter = new ExpenseListAdapter(getActivity(), cursor);
@@ -108,5 +120,19 @@ public class HomeFragment extends Fragment {
 //                Log.d("Clicked item field", " "+ item.getColumn(your column index));
             }
         });
+    }
+
+    private String getTodayDate() {
+        // Get current year, month and day
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        month++;    // MONTH starts from 0
+        return day + "/" + month + "/" + year;
+    }
+
+    private String getTodayDayOfWeek() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE");
+        return simpleDateFormat.format(calendar.getTime());
     }
 }

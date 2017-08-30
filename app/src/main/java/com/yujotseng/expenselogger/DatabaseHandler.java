@@ -9,17 +9,19 @@ import android.support.design.widget.TabLayout;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "expense.db";
 
     public static final String TABLE_EXPENSE = "expense";
 
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_NAME = "_name";
+    public static final String COLUMN_DATE = "_date";
 
     private static final String CREATE_TABLE = "CREATE TABLE " + TABLE_EXPENSE + " (" +
-            COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-            COLUMN_NAME + " TEXT NOT NULL" +
+            COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COLUMN_NAME + " TEXT NOT NULL, " +
+            COLUMN_DATE + " TEXT NOT NULL" +
             ");";
 
     public DatabaseHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -41,6 +43,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_NAME, expense.getName());
+        contentValues.put(COLUMN_DATE, expense.getDate());
         sqLiteDatabase.insert(TABLE_EXPENSE, null, contentValues);
     }
 
@@ -49,25 +52,27 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         sqLiteDatabase.delete(TABLE_EXPENSE, COLUMN_ID + " = " + _id, null);
     }
 
-    public int updateExpense(long _id, String name) {
+    public int updateExpense(long _id, String name, String date) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_NAME, name);
+        contentValues.put(COLUMN_DATE, date);
 
         int i = sqLiteDatabase.update(TABLE_EXPENSE, contentValues, COLUMN_ID + " = " + _id, null);
         return i;
     }
 
-    public Cursor getExpense(String name) {
+    public Cursor getExpense(String date) {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
 
         String[] projection = {
                 COLUMN_ID,
-                COLUMN_NAME
+                COLUMN_NAME,
+                COLUMN_DATE
         };
 
-        String selection = COLUMN_NAME + " = '" + name + "'";
+        String selection = COLUMN_DATE + " = '" + date + "'";
 
         Cursor cursor = sqLiteDatabase.query(TABLE_EXPENSE, projection, selection, null, null, null, null);
 
@@ -83,7 +88,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         String[] projection = {
                 COLUMN_ID,
-                COLUMN_NAME
+                COLUMN_NAME,
+                COLUMN_DATE
         };
 
         String selection = COLUMN_ID + " = " + _id;

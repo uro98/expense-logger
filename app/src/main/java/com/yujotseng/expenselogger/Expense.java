@@ -6,17 +6,15 @@ public class Expense {
     private String name;
 //    private double amount;
 //    private String category;
-//    private String date;
-//    private String time;
+    private String date;
 //    private String note;
 
     //public Expense(String name, double amount, String category, String date, String time, String note) {
-    public Expense(String name) {
+    public Expense(String name, String date) {
         this.name = name;
 //        this.amount = amount;
 //        this.category = category;
-//        this.date = date;
-//        this.time = time;
+        this.date = date;
 //        this.note = note;
     }
 
@@ -52,21 +50,13 @@ public class Expense {
 //        this.category = category;
 //    }
 //
-//    public String getDate() {
-//        return date;
-//    }
-//
-//    public void setDate(String date) {
-//        this.date = date;
-//    }
-//
-//    public String getTime() {
-//        return time;
-//    }
-//
-//    public void setTime(String time) {
-//        this.time = time;
-//    }
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
 //
 //    public String getNote() {
 //        return note;
