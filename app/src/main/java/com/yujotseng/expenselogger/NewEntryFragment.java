@@ -25,6 +25,7 @@ public class NewEntryFragment extends Fragment {
     private Button saveButton;
     private Button expenseDateInputButton;
     private EditText expenseNameInput;
+    private EditText expenseAmountInput;
     private TextView expenseDateInput;
     private EditText expenseNoteInput;
     private DatePickerDialog.OnDateSetListener onDateSetListener;
@@ -41,6 +42,7 @@ public class NewEntryFragment extends Fragment {
 
         // Get UI
         expenseNameInput = (EditText) view.findViewById(R.id.expenseNameInput);
+        expenseAmountInput = (EditText) view.findViewById(R.id.expenseAmountInput);
         expenseDateInput = (TextView) view.findViewById(R.id.expenseDateInput);
         expenseDateInputButton = (Button) view.findViewById(R.id.expenseDateInputButton);
         expenseNoteInput = (EditText) view.findViewById(R.id.expenseNoteInput);
@@ -101,8 +103,12 @@ public class NewEntryFragment extends Fragment {
 
     private void saveButtonClicked() {
         if (expenseNameInput.length() != 0) {
+            double expenseAmountInputDouble = Double.parseDouble(expenseAmountInput.getText().toString());
+            double expenseAmountInputRounded = Math.round(expenseAmountInputDouble * 100.0) / 100.0;        // Round to 2 decimal places
+            long expenseAmountInputInCents = (long) (expenseAmountInputRounded * 100);                      // Store amount in cents
             Expense expense = new Expense(
                     expenseNameInput.getText().toString(),
+                    expenseAmountInputInCents,
                     expenseDateInput.getText().toString(),
                     expenseNoteInput.getText().toString());
             databaseHandler.addExpense(expense);

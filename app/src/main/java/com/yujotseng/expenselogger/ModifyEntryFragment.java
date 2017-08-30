@@ -30,6 +30,7 @@ public class ModifyEntryFragment extends Fragment {
     private Button saveUpdateButton;
     private Button cancelButton;
     private EditText expenseNameUpdateInput;
+    private EditText expenseAmountUpdateInput;
     private TextView expenseDateUpdateInput;
     private EditText expenseNoteUpdateInput;
     private DatabaseHandler databaseHandler;
@@ -47,6 +48,7 @@ public class ModifyEntryFragment extends Fragment {
 
         // Get UI
         expenseNameUpdateInput = (EditText) view.findViewById(R.id.expenseNameUpdateInput);
+        expenseAmountUpdateInput = (EditText) view.findViewById(R.id.expenseAmountUpdateInput);
         expenseDateUpdateInput = (TextView)  view.findViewById(R.id.expenseDateUpdateInput);
         expenseDateUpdateInputButton = (Button) view.findViewById(R.id.expenseDateUpdateInputButton);
         expenseNoteUpdateInput = (EditText) view.findViewById(R.id.expenseNoteUpdateInput);
@@ -129,8 +131,13 @@ public class ModifyEntryFragment extends Fragment {
             } else {
                 note = cursor.getString(noteIndex);
             }
+            int amountIndex = cursor.getColumnIndex("_amount");
+            long amountInCents = cursor.getLong(amountIndex);
+            double amountModified = (double) amountInCents / 100.0;
+            String amount = Double.toString(amountModified);
 
             expenseNameUpdateInput.setText(name);               // Populate EditViews with properties
+            expenseAmountUpdateInput.setText(amount);
             expenseDateUpdateInput.setText(date);
             expenseNoteUpdateInput.setText(note);
         }
@@ -144,9 +151,13 @@ public class ModifyEntryFragment extends Fragment {
 
     private void saveUpdateButtonClicked() {
         if (expenseNameUpdateInput.length() != 0) {
+            double expenseAmountInputDouble = Double.parseDouble(expenseAmountUpdateInput.getText().toString());
+            double expenseAmountInputRounded = Math.round(expenseAmountInputDouble * 100.0) / 100.0;        // Round to 2 decimal places
+            long expenseAmountInputInCents = (long) (expenseAmountInputRounded * 100);                      // Store amount in cents
             databaseHandler.updateExpense(
                     _id,
                     expenseNameUpdateInput.getText().toString(),
+                    expenseAmountInputInCents,
                     expenseDateUpdateInput.getText().toString(),
                     expenseNoteUpdateInput.getText().toString());
         } else {

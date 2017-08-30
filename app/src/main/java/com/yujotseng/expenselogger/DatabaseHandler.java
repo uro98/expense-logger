@@ -9,19 +9,21 @@ import android.support.design.widget.TabLayout;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
     private static final String DATABASE_NAME = "expense.db";
 
     public static final String TABLE_EXPENSE = "expense";
 
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_NAME = "_name";
+    public static final String COLUMN_AMOUNT = "_amount";
     public static final String COLUMN_DATE = "_date";
     public static final String COLUMN_NOTE = "_note";
 
     private static final String CREATE_TABLE = "CREATE TABLE " + TABLE_EXPENSE + " (" +
             COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_NAME + " TEXT NOT NULL, " +
+            COLUMN_AMOUNT + " INTEGER NOT NULL, " +
             COLUMN_DATE + " TEXT NOT NULL, " +
             COLUMN_NOTE + " TEXT" +
             ");";
@@ -45,6 +47,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_NAME, expense.getName());
+        contentValues.put(COLUMN_AMOUNT, expense.getAmount());
         contentValues.put(COLUMN_DATE, expense.getDate());
         contentValues.put(COLUMN_NOTE, expense.getNote());
         sqLiteDatabase.insert(TABLE_EXPENSE, null, contentValues);
@@ -55,11 +58,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         sqLiteDatabase.delete(TABLE_EXPENSE, COLUMN_ID + " = " + _id, null);
     }
 
-    public int updateExpense(long _id, String name, String date, String note) {
+    public int updateExpense(long _id, String name, long amount, String date, String note) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_NAME, name);
+        contentValues.put(COLUMN_AMOUNT, amount);
         contentValues.put(COLUMN_DATE, date);
         contentValues.put(COLUMN_NOTE, note);
 
@@ -74,6 +78,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String[] projection = {
                 COLUMN_ID,
                 COLUMN_NAME,
+                COLUMN_AMOUNT,
                 COLUMN_DATE
         };
 
@@ -95,6 +100,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String[] projection = {
                 COLUMN_ID,
                 COLUMN_NAME,
+                COLUMN_AMOUNT,
                 COLUMN_DATE,
                 COLUMN_NOTE
         };

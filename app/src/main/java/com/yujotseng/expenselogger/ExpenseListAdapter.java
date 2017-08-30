@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 public class ExpenseListAdapter extends CursorAdapter {
@@ -38,6 +39,7 @@ public class ExpenseListAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         // Fields in inflated view to populate
         TextView expenseName = (TextView) view.findViewById(R.id.expenseName);
+        TextView expenseAmount = (TextView) view.findViewById(R.id.expenseAmount);
         TextView expenseDate = (TextView) view.findViewById(R.id.expenseDate);
 
         // Get properties from cursor
@@ -45,9 +47,17 @@ public class ExpenseListAdapter extends CursorAdapter {
         String name = cursor.getString(nameIndex);
         int dateIndex = cursor.getColumnIndex("_date");
         String date = cursor.getString(dateIndex);
+        int amountIndex = cursor.getColumnIndex("_amount");
+        long amountInCents = cursor.getLong(amountIndex);
+        double amountModified = (double) amountInCents / 100;
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
+//        numberFormat.setMinimumFractionDigits(2);
+//        numberFormat.setMaximumFractionDigits(2);
+        String amount = numberFormat.format(amountModified);
 
         // Set fields with properties
         expenseName.setText(name);
+        expenseAmount.setText(amount);
         expenseDate.setText(date);
 
         // Alternate background colors

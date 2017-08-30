@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.NumberFormat;
+
 public class ExpenseInfoFragment extends Fragment {
     private static final String TAG = "ExpenseInfoFragment";
 
@@ -22,6 +24,7 @@ public class ExpenseInfoFragment extends Fragment {
     
     private View view;
     private TextView expenseNameDetail;
+    private TextView expenseAmountDetail;
     private TextView expenseDateDetail;
     private TextView expenseNoteDetail;
     private DatabaseHandler databaseHandler;
@@ -43,6 +46,7 @@ public class ExpenseInfoFragment extends Fragment {
         Button editButton = view.findViewById(R.id.editButton);
         Button deleteButton = view.findViewById(R.id.deleteButton);
         expenseNameDetail = view.findViewById(R.id.expenseNameDetail);
+        expenseAmountDetail = view.findViewById(R.id.expenseAmountDetail);
         expenseDateDetail = view.findViewById(R.id.expenseDateDetail);
         expenseNoteDetail = view.findViewById(R.id.expenseNoteDetail);
 
@@ -98,8 +102,16 @@ public class ExpenseInfoFragment extends Fragment {
             } else {
                 note = cursor.getString(noteIndex);
             }
+            int amountIndex = cursor.getColumnIndex("_amount");
+            long amountInCents = cursor.getLong(amountIndex);
+            double amountModified = (double) amountInCents / 100;
+            NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
+//            numberFormat.setMinimumFractionDigits(2);
+//            numberFormat.setMaximumFractionDigits(2);
+            String amount = numberFormat.format(amountModified);
 
             expenseNameDetail.setText(name);                    // Populate TextViews with properties
+            expenseAmountDetail.setText(amount);
             expenseDateDetail.setText(date);
             expenseNoteDetail.setText(note);
         }

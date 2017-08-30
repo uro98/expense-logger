@@ -2,27 +2,27 @@ package com.yujotseng.expenselogger;
 
 public class Expense {
 
-    private int id;
+    private long id;
     private String name;
-//    private double amount;
+    private long amount;
 //    private String category;
     private String date;
     private String note;
 
-    //public Expense(String name, double amount, String category, String date, String time, String note) {
-    public Expense(String name, String date, String note) {
+    //public Expense(String name, double amount, String category, String date, String note) {
+    public Expense(String name, long amount, String date, String note) {
         this.name = name;
-//        this.amount = amount;
+        this.amount = amount;
 //        this.category = category;
         this.date = date;
         this.note = note;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -34,13 +34,13 @@ public class Expense {
         this.name = name;
     }
 
-//    public double getAmount() {
-//        return amount;
-//    }
-//
-//    public void setAmount(double amount) {
-//        this.amount = amount;
-//    }
+    public long getAmount() {
+        return amount;
+    }
+
+    public void setAmount(long amount) {
+        this.amount = amount;
+    }
 //
 //    public String getCategory() {
 //        return category;
@@ -57,7 +57,7 @@ public class Expense {
     public void setDate(String date) {
         this.date = date;
     }
-//
+
     public String getNote() {
         return note;
     }
