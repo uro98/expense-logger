@@ -40,13 +40,11 @@ public class ExpenseListAdapter extends CursorAdapter {
         // Fields in inflated view to populate
         TextView expenseName = (TextView) view.findViewById(R.id.expenseName);
         TextView expenseAmount = (TextView) view.findViewById(R.id.expenseAmount);
-        TextView expenseDate = (TextView) view.findViewById(R.id.expenseDate);
+        TextView expenseCategory = (TextView) view.findViewById(R.id.expenseCategory);
 
         // Get properties from cursor
         int nameIndex = cursor.getColumnIndex("_name");
         String name = cursor.getString(nameIndex);
-        int dateIndex = cursor.getColumnIndex("_date");
-        String date = cursor.getString(dateIndex);
         int amountIndex = cursor.getColumnIndex("_amount");
         long amountInCents = cursor.getLong(amountIndex);
         double amountModified = (double) amountInCents / 100;
@@ -58,7 +56,7 @@ public class ExpenseListAdapter extends CursorAdapter {
         // Set fields with properties
         expenseName.setText(name);
         expenseAmount.setText(amount);
-        expenseDate.setText(date);
+        //expenseCategory.setText(date);
 
         // Alternate background colors
 //        if (cursor.getPosition()%2==1) {

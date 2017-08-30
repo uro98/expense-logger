@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -35,7 +36,9 @@ public class HomeFragment extends Fragment {
     private ListView expenseListView;
     private PassDataListener callback;
     private TextView date;
+    private TextView totalSpent;
     private Calendar calendar;
+    Cursor cursor;
 
     public interface PassDataListener {
         public void passData(long id, boolean toView);
@@ -65,12 +68,14 @@ public class HomeFragment extends Fragment {
 
         // Get UI
         date = (TextView) view.findViewById(R.id.date);
+        totalSpent = (TextView) view.findViewById(R.id.totalSpent);
         newEntryButton = (Button) view.findViewById(R.id.newEntryButton);
         expenseListView = (ListView) view.findViewById(R.id.expenseListView);
         expenseListView.setEmptyView(view.findViewById(R.id.emptyListView));
 
         // Set UI
         date.setText(getTodayDate() + "\n" + getTodayDayOfWeek());
+        totalSpent.setText("Total spent: " + getTotalSpent(getTodayDate()));
 
         // Get NewEntryFragment
         fragment = getFragmentManager().findFragmentByTag("NewEntryFragment");
@@ -104,7 +109,7 @@ public class HomeFragment extends Fragment {
 
     private void populateListView(String date) {
         // Get expense and append to ArrayList
-        Cursor cursor = databaseHandler.getExpense(date);
+        cursor = databaseHandler.getExpense(date);
 
         // Create and set List Adapter
         ExpenseListAdapter expenseListAdapter = new ExpenseListAdapter(getActivity(), cursor);
@@ -134,5 +139,25 @@ public class HomeFragment extends Fragment {
     private String getTodayDayOfWeek() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE");
         return simpleDateFormat.format(calendar.getTime());
+    }
+
+    private String getTotalSpent(String date) {
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
+        long totalSpentInCents = 0;
+        String amount;
+        cursor = databaseHandler.getExpense(date);
+        if (cursor.moveToFirst()) {
+            do {
+                int amountIndex = cursor.getColumnIndex("_amount");
+                long amountInCents = cursor.getLong(amountIndex);
+                totalSpentInCents += amountInCents;
+            } while (cursor.moveToNext());
+            double amountModified = (double) totalSpentInCents / 100;
+            amount = numberFormat.format(amountModified);
+        } else {
+            amount = numberFormat.format(totalSpentInCents);
+        }
+        cursor.close();
+        return amount;
     }
 }
