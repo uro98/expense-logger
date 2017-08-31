@@ -23,7 +23,6 @@ public class ExpenseInfoFragment extends Fragment {
     public final static String EXPENSE_ID = "_id";
     
     private View view;
-    private TextView expenseNameDetail;
     private TextView expenseAmountDetail;
     private TextView expenseDateDetail;
     private TextView expenseNoteDetail;
@@ -45,7 +44,6 @@ public class ExpenseInfoFragment extends Fragment {
         // Get UI
         Button editButton = view.findViewById(R.id.editButton);
         Button deleteButton = view.findViewById(R.id.deleteButton);
-        expenseNameDetail = view.findViewById(R.id.expenseNameDetail);
         expenseAmountDetail = view.findViewById(R.id.expenseAmountDetail);
         expenseDateDetail = view.findViewById(R.id.expenseDateDetail);
         expenseNoteDetail = view.findViewById(R.id.expenseNoteDetail);
@@ -91,8 +89,7 @@ public class ExpenseInfoFragment extends Fragment {
             _id = bundle.getLong(EXPENSE_ID);                   // Get ID
             Cursor cursor = databaseHandler.getExpense(_id);    // Get cursor from ID
 
-            int nameIndex = cursor.getColumnIndex("_name");     // Get expense properties from ID
-            String name = cursor.getString(nameIndex);
+            // Get expense properties from ID
             int dateIndex = cursor.getColumnIndex("_date");
             String date = cursor.getString(dateIndex);
             int noteIndex = cursor.getColumnIndex("_note");
@@ -110,7 +107,7 @@ public class ExpenseInfoFragment extends Fragment {
 //            numberFormat.setMaximumFractionDigits(2);
             String amount = numberFormat.format(amountModified);
 
-            expenseNameDetail.setText(name);                    // Populate TextViews with properties
+            // Populate TextViews with properties
             expenseAmountDetail.setText(amount);
             expenseDateDetail.setText(date);
             expenseNoteDetail.setText(note);

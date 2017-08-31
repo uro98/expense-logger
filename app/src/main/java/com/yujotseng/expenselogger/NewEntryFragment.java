@@ -26,7 +26,6 @@ public class NewEntryFragment extends Fragment {
     private View view;
     private Button saveButton;
     private Button expenseDateInputButton;
-    private EditText expenseNameInput;
     private EditText expenseAmountInput;
     private TextView expenseDateInput;
     private EditText expenseNoteInput;
@@ -43,7 +42,6 @@ public class NewEntryFragment extends Fragment {
         databaseHandler = new DatabaseHandler(getActivity(), null, null, 1);
 
         // Get UI
-        expenseNameInput = (EditText) view.findViewById(R.id.expenseNameInput);
         expenseAmountInput = (EditText) view.findViewById(R.id.expenseAmountInput);
         expenseDateInput = (TextView) view.findViewById(R.id.expenseDateInput);
         expenseDateInputButton = (Button) view.findViewById(R.id.expenseDateInputButton);
@@ -116,12 +114,11 @@ public class NewEntryFragment extends Fragment {
     }
 
     private void saveButtonClicked() {
-        if (expenseNameInput.length() != 0) {
+        if (expenseAmountInput.length() != 0) {
             double expenseAmountInputDouble = Double.parseDouble(expenseAmountInput.getText().toString());
             double expenseAmountInputRounded = Math.round(expenseAmountInputDouble * 100.0) / 100.0;        // Round to 2 decimal places
             long expenseAmountInputInCents = (long) (expenseAmountInputRounded * 100);                      // Store amount in cents
             Expense expense = new Expense(
-                    expenseNameInput.getText().toString(),
                     expenseAmountInputInCents,
                     expenseDateInput.getText().toString(),
                     expenseNoteInput.getText().toString());

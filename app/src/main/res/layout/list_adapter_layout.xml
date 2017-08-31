@@ -7,9 +7,9 @@
     <TextView
         android:layout_width="0dp"
         android:layout_height="60dp"
-        android:id="@+id/expenseName"
+        android:id="@+id/expenseNote"
         android:layout_weight="33.3"
-        android:text="Expense Name"
+        android:text="Note"
         android:textAlignment="center"
         android:gravity="center"/>
 

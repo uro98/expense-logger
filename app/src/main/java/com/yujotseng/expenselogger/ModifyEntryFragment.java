@@ -29,7 +29,6 @@ public class ModifyEntryFragment extends Fragment {
     private Button expenseDateUpdateInputButton;
     private Button saveUpdateButton;
     private Button cancelButton;
-    private EditText expenseNameUpdateInput;
     private EditText expenseAmountUpdateInput;
     private TextView expenseDateUpdateInput;
     private EditText expenseNoteUpdateInput;
@@ -47,7 +46,6 @@ public class ModifyEntryFragment extends Fragment {
         databaseHandler = new DatabaseHandler(getActivity(), null, null, 1);
 
         // Get UI
-        expenseNameUpdateInput = (EditText) view.findViewById(R.id.expenseNameUpdateInput);
         expenseAmountUpdateInput = (EditText) view.findViewById(R.id.expenseAmountUpdateInput);
         expenseDateUpdateInput = (TextView)  view.findViewById(R.id.expenseDateUpdateInput);
         expenseDateUpdateInputButton = (Button) view.findViewById(R.id.expenseDateUpdateInputButton);
@@ -120,8 +118,7 @@ public class ModifyEntryFragment extends Fragment {
             _id = bundle.getLong(EXPENSE_ID);                   // Get ID
             Cursor cursor = databaseHandler.getExpense(_id);    // Get cursor from ID
 
-            int nameIndex = cursor.getColumnIndex("_name");     // Get expense properties from ID
-            String name = cursor.getString(nameIndex);
+            // Get expense properties from ID
             int dateIndex = cursor.getColumnIndex("_date");
             String date = cursor.getString(dateIndex);
             int noteIndex = cursor.getColumnIndex("_note");
@@ -136,7 +133,7 @@ public class ModifyEntryFragment extends Fragment {
             double amountModified = (double) amountInCents / 100.0;
             String amount = Double.toString(amountModified);
 
-            expenseNameUpdateInput.setText(name);               // Populate EditViews with properties
+            // Populate EditViews with properties
             expenseAmountUpdateInput.setText(amount);
             expenseDateUpdateInput.setText(date);
             expenseNoteUpdateInput.setText(note);
@@ -150,13 +147,12 @@ public class ModifyEntryFragment extends Fragment {
     }
 
     private void saveUpdateButtonClicked() {
-        if (expenseNameUpdateInput.length() != 0) {
+        if (expenseAmountUpdateInput.length() != 0) {
             double expenseAmountInputDouble = Double.parseDouble(expenseAmountUpdateInput.getText().toString());
             double expenseAmountInputRounded = Math.round(expenseAmountInputDouble * 100.0) / 100.0;        // Round to 2 decimal places
             long expenseAmountInputInCents = (long) (expenseAmountInputRounded * 100);                      // Store amount in cents
             databaseHandler.updateExpense(
                     _id,
-                    expenseNameUpdateInput.getText().toString(),
                     expenseAmountInputInCents,
                     expenseDateUpdateInput.getText().toString(),
                     expenseNoteUpdateInput.getText().toString());
