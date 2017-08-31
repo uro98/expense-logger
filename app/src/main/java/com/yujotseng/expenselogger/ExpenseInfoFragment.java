@@ -76,7 +76,7 @@ public class ExpenseInfoFragment extends Fragment {
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                callback.passData(_id, false);
+                callback.passID(_id, false);
             }
         });
 
@@ -120,7 +120,7 @@ public class ExpenseInfoFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        // Make sure host activity implements OnListItemSelectedListener interface, otherwise throw exception
+        // Make sure host activity implements PassIDListener interface, otherwise throw exception
         try {
             callback = (HomeFragment.PassDataListener) context;
         } catch (ClassCastException e) {

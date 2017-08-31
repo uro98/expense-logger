@@ -20,6 +20,8 @@ import java.util.Calendar;
 
 public class NewEntryFragment extends Fragment {
     private static final String TAG = "NewEntryFragment";
+
+    public static final String DATE = "_date";
     
     private View view;
     private Button saveButton;
@@ -93,6 +95,18 @@ public class NewEntryFragment extends Fragment {
         };
 
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            String calendarDate = bundle.getString(DATE);
+            expenseDateInput.setText(calendarDate);
+        } else {
+            expenseDateInput.setText((new HomeFragment()).getTodayDate());
+        }
     }
 
     public void onDestroyView() {

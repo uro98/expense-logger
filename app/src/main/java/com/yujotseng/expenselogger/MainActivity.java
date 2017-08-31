@@ -1,6 +1,8 @@
 package com.yujotseng.expenselogger;
 
 import android.support.annotation.NonNull;
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Pass
         switchFragment(0);
 
         // Disable bot nav view icon animation
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView);
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
     }
 
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Pass
         transaction.commit();
     }
 
-    public void passData(long id, boolean toView) {
+    public void passID(long id, boolean toView) {
         if (toView == true) {
             ExpenseInfoFragment expenseInfoFragment = (ExpenseInfoFragment) getSupportFragmentManager().findFragmentByTag("ExpenseInfoFragment");
             if (expenseInfoFragment == null) {
@@ -97,6 +99,43 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Pass
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragmentContainer, modifyEntryFragment);
+            transaction.commit();
+        }
+    }
+
+    @Override
+    public void PassDate(String date, int year, int month, int day, boolean toHome) {
+        if (toHome == true) {
+            HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag("HomeFragment");
+            if (homeFragment == null) {
+                homeFragment = new HomeFragment();
+            }
+
+            Bundle bundle = new Bundle();
+            bundle.putString(HomeFragment.DATE, date);
+            bundle.putInt(HomeFragment.YEAR, year);
+            bundle.putInt(HomeFragment.MONTH, month);
+            bundle.putInt(HomeFragment.DAY, day);
+            homeFragment.setArguments(bundle);
+
+            // Change bottomNavigationView menuItem highlight
+            bottomNavigationView.setSelectedItemId(R.id.action_home);
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragmentContainer, homeFragment);
+            transaction.commit();
+        } else {
+            NewEntryFragment newEntryFragment = (NewEntryFragment) getSupportFragmentManager().findFragmentByTag("NewEntryFragment");
+            if (newEntryFragment == null) {
+                newEntryFragment = new NewEntryFragment();
+            }
+
+            Bundle bundle = new Bundle();
+            bundle.putString(NewEntryFragment.DATE, date);
+            newEntryFragment.setArguments(bundle);
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragmentContainer, newEntryFragment);
             transaction.commit();
         }
     }

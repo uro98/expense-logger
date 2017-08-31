@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Expense Logger</string>
+    <string name="calendar_toolbar">Calendar</string>
+
 </resources>
