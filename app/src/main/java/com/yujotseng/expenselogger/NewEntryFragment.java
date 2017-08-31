@@ -1,16 +1,19 @@
 package com.yujotseng.expenselogger;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -26,6 +29,8 @@ public class NewEntryFragment extends Fragment {
     private View view;
     private Button saveButton;
     private Button expenseDateInputButton;
+    private Button expenseCategoryInputButton;
+    private TextView expenseCategoryInput;
     private EditText expenseAmountInput;
     private TextView expenseDateInput;
     private EditText expenseNoteInput;
@@ -42,11 +47,16 @@ public class NewEntryFragment extends Fragment {
         databaseHandler = new DatabaseHandler(getActivity(), null, null, 1);
 
         // Get UI
+        expenseCategoryInput = (TextView) view.findViewById(R.id.expenseCategoryInput);
+        expenseCategoryInputButton = (Button) view.findViewById(R.id.expenseCategoryInputButton);
         expenseAmountInput = (EditText) view.findViewById(R.id.expenseAmountInput);
         expenseDateInput = (TextView) view.findViewById(R.id.expenseDateInput);
         expenseDateInputButton = (Button) view.findViewById(R.id.expenseDateInputButton);
         expenseNoteInput = (EditText) view.findViewById(R.id.expenseNoteInput);
         saveButton = (Button) view.findViewById(R.id.saveButton);
+
+        // Set UI
+        expenseCategoryInput.setText("Category");
 
         // Get HomeFragment
         fragment = getFragmentManager().findFragmentByTag("HomeFragment");
@@ -55,6 +65,13 @@ public class NewEntryFragment extends Fragment {
         }
 
         // Set buttons onClickListener
+        expenseCategoryInputButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showCategoryDialog();
+            }
+        });
+
         expenseDateInputButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,6 +124,7 @@ public class NewEntryFragment extends Fragment {
         }
     }
 
+    @Override
     public void onDestroyView() {
         Log.d(TAG, "onDestroyView: ");
         super.onDestroyView();
@@ -126,5 +144,43 @@ public class NewEntryFragment extends Fragment {
         } else {
             Toast.makeText(getActivity(),"You must put something in the text field!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void showCategoryDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater layoutInflater = getActivity().getLayoutInflater();
+        builder.setView(layoutInflater.inflate(R.layout.category_dialog_layout, null));
+
+        builder.setTitle("Select a Category");
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogInterface, int id) {
+                dialogInterface.cancel();
+            }
+        });
+
+//        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.select_dialog_singlechoice);
+//        arrayAdapter.add("Hardik");
+//        arrayAdapter.add("Archit");
+//        arrayAdapter.add("Jignesh");
+//        arrayAdapter.add("Umang");
+//        arrayAdapter.add("Gatti");
+//        builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//                String strName = arrayAdapter.getItem(i);
+//                AlertDialog.Builder builderInner = new AlertDialog.Builder(getActivity());
+//                builderInner.setMessage(strName);
+//                builderInner.setTitle("Your Selected Item is");
+//                builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog,int which) {
+//                        dialog.dismiss();
+//                    }
+//                });
+//                builderInner.show();
+//            }
+//        });
+
+        builder.show();
     }
 }

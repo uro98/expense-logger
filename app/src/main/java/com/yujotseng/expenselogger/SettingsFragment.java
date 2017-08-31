@@ -25,6 +25,7 @@ public class SettingsFragment extends Fragment {
         return view;
     }
 
+    @Override
     public void onDestroyView() {
         Log.d(TAG, "onDestroyView: ");
         super.onDestroyView();

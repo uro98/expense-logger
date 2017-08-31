@@ -140,6 +140,7 @@ public class ModifyEntryFragment extends Fragment {
         }
     }
 
+    @Override
     public void onDestroyView() {
         Log.d(TAG, "onDestroyView: ");
         super.onDestroyView();

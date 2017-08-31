@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Expense Logger</string>
     <string name="calendar_toolbar">Calendar</string>
+    <string name="add_new_category">+ New Category</string>
 
 </resources>
