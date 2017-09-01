@@ -2,6 +2,7 @@ package com.yujotseng.expenselogger;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -13,12 +14,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class NewEntryFragment extends Fragment {
@@ -37,6 +42,8 @@ public class NewEntryFragment extends Fragment {
     private DatePickerDialog.OnDateSetListener onDateSetListener;
     private DatabaseHandler databaseHandler;
     private Fragment fragment;
+    //private ListView categoryListView;
+    private AlertDialog.Builder showBuilder;
 
     @Nullable
     @Override
@@ -44,7 +51,7 @@ public class NewEntryFragment extends Fragment {
         view = inflater.inflate(R.layout.new_entry_layout, container, false);
 
         // Instantiate database
-        databaseHandler = new DatabaseHandler(getActivity(), null, null, 1);
+        databaseHandler = new DatabaseHandler(getActivity());
 
         // Get UI
         expenseCategoryInput = (TextView) view.findViewById(R.id.expenseCategoryInput);
@@ -137,6 +144,7 @@ public class NewEntryFragment extends Fragment {
             double expenseAmountInputRounded = Math.round(expenseAmountInputDouble * 100.0) / 100.0;        // Round to 2 decimal places
             long expenseAmountInputInCents = (long) (expenseAmountInputRounded * 100);                      // Store amount in cents
             Expense expense = new Expense(
+                    expenseCategoryInput.getText().toString(),
                     expenseAmountInputInCents,
                     expenseDateInput.getText().toString(),
                     expenseNoteInput.getText().toString());
@@ -147,40 +155,65 @@ public class NewEntryFragment extends Fragment {
     }
 
     private void showCategoryDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater layoutInflater = getActivity().getLayoutInflater();
-        builder.setView(layoutInflater.inflate(R.layout.category_dialog_layout, null));
+        showBuilder = new AlertDialog.Builder(getActivity());
 
-        builder.setTitle("Select a Category");
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        showBuilder.setTitle("Select a Category");
+        showBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int id) {
                 dialogInterface.cancel();
             }
         });
+        showBuilder.setPositiveButton("+ New Category", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // Create another dialog
+                AlertDialog.Builder newBuilder = new AlertDialog.Builder(getActivity());
+                LayoutInflater newLayoutInflater = getActivity().getLayoutInflater();
+                View newCategoryView = newLayoutInflater.inflate(R.layout.new_category_dialog_layout, null);
+                newBuilder.setView(newCategoryView);
 
-//        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.select_dialog_singlechoice);
-//        arrayAdapter.add("Hardik");
-//        arrayAdapter.add("Archit");
-//        arrayAdapter.add("Jignesh");
-//        arrayAdapter.add("Umang");
-//        arrayAdapter.add("Gatti");
-//        builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialogInterface, int i) {
-//                String strName = arrayAdapter.getItem(i);
-//                AlertDialog.Builder builderInner = new AlertDialog.Builder(getActivity());
-//                builderInner.setMessage(strName);
-//                builderInner.setTitle("Your Selected Item is");
-//                builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog,int which) {
-//                        dialog.dismiss();
-//                    }
-//                });
-//                builderInner.show();
-//            }
-//        });
+                final EditText newCategoryInput = (EditText) newCategoryView.findViewById(R.id.newCategoryInput);
 
-        builder.show();
+                newBuilder.setTitle("Add New Category");
+                newBuilder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // Add category and return
+                        databaseHandler.addCategory(newCategoryInput.getText().toString());
+                        dialogInterface.dismiss();
+                    }
+                });
+                newBuilder.show();
+            }
+        });
+
+        populateCategoryListView();
+
+        showBuilder.show();
+    }
+
+    private void populateCategoryListView() {
+        // Get categories
+        Cursor cursor = databaseHandler.getCategory();
+
+        // Store categories in an ArrayList
+        ArrayList<String> categoryArrayList = new ArrayList<>();
+        if (cursor.moveToFirst()) {
+            do {
+                String categoryName = cursor.getString(0);
+                categoryArrayList.add(categoryName);
+            } while (cursor.moveToNext());
+        }
+
+        // Create and set ArrayAdapter
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.select_dialog_item, categoryArrayList);
+        showBuilder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                String categoryName = arrayAdapter.getItem(i);
+                expenseCategoryInput.setText(categoryName);
+                dialogInterface.dismiss();
+            }
+        });
     }
 }

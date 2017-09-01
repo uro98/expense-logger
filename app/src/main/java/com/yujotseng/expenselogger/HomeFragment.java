@@ -64,7 +64,7 @@ public class HomeFragment extends Fragment {
         calendar = Calendar.getInstance();
 
         // Instantiate database
-        databaseHandler = new DatabaseHandler(getActivity(), null, null, 1);
+        databaseHandler = new DatabaseHandler(getActivity());
 
         // Get UI
         date = (TextView) view.findViewById(R.id.date);
@@ -137,10 +137,10 @@ public class HomeFragment extends Fragment {
     }
 
     private void populateListView(String date) {
-        // Get expense and append to ArrayList
+        // Get expenses
         cursor = databaseHandler.getExpense(date);
 
-        // Create and set List Adapter
+        // Create and set ListAdapter
         ExpenseListAdapter expenseListAdapter = new ExpenseListAdapter(getActivity(), cursor);
         expenseListView.setAdapter(expenseListAdapter);
 

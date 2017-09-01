@@ -23,6 +23,7 @@ public class ExpenseInfoFragment extends Fragment {
     public final static String EXPENSE_ID = "_id";
     
     private View view;
+    private TextView expenseCategoryDetail;
     private TextView expenseAmountDetail;
     private TextView expenseDateDetail;
     private TextView expenseNoteDetail;
@@ -39,11 +40,12 @@ public class ExpenseInfoFragment extends Fragment {
         view = inflater.inflate(R.layout.expense_info_layout, container, false);
 
         // Instantiate database
-        databaseHandler = new DatabaseHandler(getActivity(), null, null, 1);
+        databaseHandler = new DatabaseHandler(getActivity());
 
         // Get UI
         Button editButton = view.findViewById(R.id.editButton);
         Button deleteButton = view.findViewById(R.id.deleteButton);
+        expenseCategoryDetail = view.findViewById(R.id.expenseCategoryDetail);
         expenseAmountDetail = view.findViewById(R.id.expenseAmountDetail);
         expenseDateDetail = view.findViewById(R.id.expenseDateDetail);
         expenseNoteDetail = view.findViewById(R.id.expenseNoteDetail);
@@ -90,6 +92,8 @@ public class ExpenseInfoFragment extends Fragment {
             Cursor cursor = databaseHandler.getExpense(_id);    // Get cursor from ID
 
             // Get expense properties from ID
+            int categoryIndex = cursor.getColumnIndex("_category");
+            String category = cursor.getString(categoryIndex);
             int dateIndex = cursor.getColumnIndex("_date");
             String date = cursor.getString(dateIndex);
             int noteIndex = cursor.getColumnIndex("_note");
@@ -103,11 +107,10 @@ public class ExpenseInfoFragment extends Fragment {
             long amountInCents = cursor.getLong(amountIndex);
             double amountModified = (double) amountInCents / 100;
             NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
-//            numberFormat.setMinimumFractionDigits(2);
-//            numberFormat.setMaximumFractionDigits(2);
             String amount = numberFormat.format(amountModified);
 
             // Populate TextViews with properties
+            expenseCategoryDetail.setText(category);
             expenseAmountDetail.setText(amount);
             expenseDateDetail.setText(date);
             expenseNoteDetail.setText(note);

@@ -2,26 +2,17 @@ package com.yujotseng.expenselogger;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 import java.text.NumberFormat;
-import java.util.ArrayList;
 
 public class ExpenseListAdapter extends CursorAdapter {
 
     private static final String TAG = "ExpenseListAdapter";
-
-    Context context;
-    int resource;
 
     public ExpenseListAdapter(Context context, Cursor c) {
         super(context, c, 0);
@@ -30,7 +21,7 @@ public class ExpenseListAdapter extends CursorAdapter {
     // Inflate and return new view
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
-        View view = LayoutInflater.from(context).inflate(R.layout.list_adapter_layout, viewGroup, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.expense_list_adapter_layout, viewGroup, false);
         return view;
     }
 
@@ -43,6 +34,8 @@ public class ExpenseListAdapter extends CursorAdapter {
         TextView expenseAmount = (TextView) view.findViewById(R.id.expenseAmount);
 
         // Get properties from cursor
+        int categoryIndex = cursor.getColumnIndex("_category");
+        String category = cursor.getString(categoryIndex);
         int noteIndex = cursor.getColumnIndex("_note");
         String note;
         if (cursor.isNull(noteIndex)) {
@@ -54,14 +47,12 @@ public class ExpenseListAdapter extends CursorAdapter {
         long amountInCents = cursor.getLong(amountIndex);
         double amountModified = (double) amountInCents / 100;
         NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
-//        numberFormat.setMinimumFractionDigits(2);
-//        numberFormat.setMaximumFractionDigits(2);
         String amount = numberFormat.format(amountModified);
 
         // Set fields with properties
+        expenseCategory.setText(category);
         expenseNote.setText(note);
         expenseAmount.setText(amount);
-        //expenseCategory.setText(date);
 
         // Alternate background colors
 //        if (cursor.getPosition()%2==1) {
