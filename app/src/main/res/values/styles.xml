@@ -12,4 +12,13 @@
         <item name="colorAccent">@color/colorPrimary</item>
     </style>
 
+    <style name="FloatingLabelStyle" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+    
+    <style name="EditTextStyle" parent="Theme.AppCompat.Light">
+        <item name="colorControlActivated">@color/colorPrimary</item>
+    </style>
+
 </resources>

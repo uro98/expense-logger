@@ -6,31 +6,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/edit_expense"
+                android:textSize="25sp"
+                android:textAlignment="center"
+                android:layout_gravity="center"
+                android:textColor="@android:color/white"/>
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <EditText
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="100">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/expenseCategoryUpdateInput"
-            android:text="Category"
-            android:textSize="25sp"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_weight="45"/>
-
-        <Button
-            android:id="@+id/expenseCategoryUpdateInputButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Select"
-            android:textAlignment="center"
-            android:layout_weight="50"/>
-
-    </LinearLayout>
+        android:id="@+id/expenseCategoryUpdateInput"
+        android:hint="Category"
+        android:ems="7"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:clickable="true"
+        android:longClickable="false"
+        android:focusable="false"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -42,31 +49,17 @@
         android:layout_marginTop="8dp"
         android:layout_marginLeft="8dp"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <EditText
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="100">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/expenseDateUpdateInput"
-            android:text="30/8/2017"
-            android:textSize="25sp"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_weight="45"/>
-
-        <Button
-            android:id="@+id/expenseDateUpdateInputButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Change"
-            android:textAlignment="center"
-            android:layout_weight="50"/>
-
-    </LinearLayout>
+        android:id="@+id/expenseDateUpdateInput"
+        android:text="30/8/2017"
+        android:textSize="25sp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:clickable="true"
+        android:longClickable="false"
+        android:focusable="false"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -92,7 +85,7 @@
         android:text="Save"
         android:textAlignment="center"
         android:layout_marginLeft="8dp"
-        android:layout_marginBottom="251dp"
+        android:layout_marginBottom="25dp"
         android:layout_marginRight="84dp" />
 
 </LinearLayout>

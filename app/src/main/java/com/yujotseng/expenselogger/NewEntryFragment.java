@@ -33,8 +33,6 @@ public class NewEntryFragment extends Fragment {
     
     private View view;
     private Button saveButton;
-    private Button expenseDateInputButton;
-    private Button expenseCategoryInputButton;
     private TextView expenseCategoryInput;
     private EditText expenseAmountInput;
     private TextView expenseDateInput;
@@ -55,15 +53,10 @@ public class NewEntryFragment extends Fragment {
 
         // Get UI
         expenseCategoryInput = (TextView) view.findViewById(R.id.expenseCategoryInput);
-        expenseCategoryInputButton = (Button) view.findViewById(R.id.expenseCategoryInputButton);
         expenseAmountInput = (EditText) view.findViewById(R.id.expenseAmountInput);
         expenseDateInput = (TextView) view.findViewById(R.id.expenseDateInput);
-        expenseDateInputButton = (Button) view.findViewById(R.id.expenseDateInputButton);
         expenseNoteInput = (EditText) view.findViewById(R.id.expenseNoteInput);
         saveButton = (Button) view.findViewById(R.id.saveButton);
-
-        // Set UI
-        expenseCategoryInput.setText("Category");
 
         // Get HomeFragment
         fragment = getFragmentManager().findFragmentByTag("HomeFragment");
@@ -71,15 +64,15 @@ public class NewEntryFragment extends Fragment {
             fragment = new HomeFragment();
         }
 
-        // Set buttons onClickListener
-        expenseCategoryInputButton.setOnClickListener(new View.OnClickListener() {
+        // Set onClickListeners
+        expenseCategoryInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showCategoryDialog();
             }
         });
 
-        expenseDateInputButton.setOnClickListener(new View.OnClickListener() {
+        expenseDateInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Calendar calendar = Calendar.getInstance();
@@ -139,7 +132,8 @@ public class NewEntryFragment extends Fragment {
     }
 
     private void saveButtonClicked() {
-        if (expenseAmountInput.length() != 0) {
+        // If category and amount is not empty
+        if (expenseCategoryInput.getText().toString().length() != 0 && expenseAmountInput.length() != 0) {
             double expenseAmountInputDouble = Double.parseDouble(expenseAmountInput.getText().toString());
             double expenseAmountInputRounded = Math.round(expenseAmountInputDouble * 100.0) / 100.0;        // Round to 2 decimal places
             long expenseAmountInputInCents = (long) (expenseAmountInputRounded * 100);                      // Store amount in cents
@@ -150,7 +144,7 @@ public class NewEntryFragment extends Fragment {
                     expenseNoteInput.getText().toString());
             databaseHandler.addExpense(expense);
         } else {
-            Toast.makeText(getActivity(),"You must put something in the text field!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "You must select a category and enter an amount!", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -178,8 +172,12 @@ public class NewEntryFragment extends Fragment {
                 newBuilder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // Add category and return
-                        databaseHandler.addCategory(newCategoryInput.getText().toString());
+                        // Make sure category is not empty, add category and return
+                        if (newCategoryInput.getText().toString().length() != 0) {
+                            databaseHandler.addCategory(newCategoryInput.getText().toString());
+                        } else {
+                            Toast.makeText(getActivity(), "Please enter a category name!", Toast.LENGTH_LONG).show();
+                        }
                         dialogInterface.dismiss();
                     }
                 });

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +50,9 @@ public class ExpenseInfoFragment extends Fragment {
         expenseAmountDetail = view.findViewById(R.id.expenseAmountDetail);
         expenseDateDetail = view.findViewById(R.id.expenseDateDetail);
         expenseNoteDetail = view.findViewById(R.id.expenseNoteDetail);
+
+        // Set UI
+        expenseNoteDetail.setMovementMethod(new ScrollingMovementMethod());
 
         // Get Fragments
         homeFragment = getFragmentManager().findFragmentByTag("HomeFragment");

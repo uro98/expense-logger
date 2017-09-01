@@ -10,22 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!--<RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/relLayoutMiddle"
-            android:layout_above="@+id/bottomNavView">
-
-            <!-Page
-            <android.support.v4.view.ViewPager
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/container">
-
-            </android.support.v4.view.ViewPager>
-
-        </RelativeLayout>-->
-
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

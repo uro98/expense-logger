@@ -4,11 +4,12 @@
     <color name="colorPrimaryDark">#303F9F</color>-->
     <color name="colorPrimary">#00AA8D</color>
     <color name="colorPrimaryDark">#008975</color>
-    <color name="colorAccent">#448AFF</color>
+    <color name="colorAccent">#FFCC33</color>
     <color name="colorDark">#001616</color>
     <color name="colorLight">#00BF9A</color>
     <color name="colorOdd">#fff</color>
     <color name="colorEven">#D0F0C0</color>
     <color name="colorGrey">#2a3439</color>
-
+    <color name="colorPink">#ff69b4</color>
+    <color name="colorGold">#FFD700</color>
 </resources>

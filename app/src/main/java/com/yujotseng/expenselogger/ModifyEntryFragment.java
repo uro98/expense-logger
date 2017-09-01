@@ -30,10 +30,8 @@ public class ModifyEntryFragment extends Fragment {
     public final static String EXPENSE_ID = "id";
     
     private View view;
-    private Button expenseDateUpdateInputButton;
     private Button saveUpdateButton;
     private Button cancelButton;
-    private Button expenseCategoryUpdateInputButton;
     private TextView expenseCategoryUpdateInput;
     private EditText expenseAmountUpdateInput;
     private TextView expenseDateUpdateInput;
@@ -54,10 +52,8 @@ public class ModifyEntryFragment extends Fragment {
 
         // Get UI
         expenseCategoryUpdateInput = (TextView) view.findViewById(R.id.expenseCategoryUpdateInput);
-        expenseCategoryUpdateInputButton = (Button) view.findViewById(R.id.expenseCategoryUpdateInputButton);
         expenseAmountUpdateInput = (EditText) view.findViewById(R.id.expenseAmountUpdateInput);
         expenseDateUpdateInput = (TextView)  view.findViewById(R.id.expenseDateUpdateInput);
-        expenseDateUpdateInputButton = (Button) view.findViewById(R.id.expenseDateUpdateInputButton);
         expenseNoteUpdateInput = (EditText) view.findViewById(R.id.expenseNoteUpdateInput);
         saveUpdateButton = (Button) view.findViewById(R.id.saveUpdateButton);
         cancelButton = (Button) view.findViewById(R.id.cancelButton);
@@ -68,15 +64,15 @@ public class ModifyEntryFragment extends Fragment {
             fragment = new HomeFragment();
         }
 
-        // Set buttons onClickListeners
-        expenseCategoryUpdateInputButton.setOnClickListener(new View.OnClickListener() {
+        // Set onClickListeners
+        expenseCategoryUpdateInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showCategoryDialog();
             }
         });
 
-        expenseDateUpdateInputButton.setOnClickListener(new View.OnClickListener() {
+        expenseDateUpdateInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Calendar calendar = Calendar.getInstance();
@@ -167,7 +163,8 @@ public class ModifyEntryFragment extends Fragment {
     }
 
     private void saveUpdateButtonClicked() {
-        if (expenseAmountUpdateInput.length() != 0) {
+        // If category and amount is not empty
+        if (expenseCategoryUpdateInput.getText().toString().length() != 0 && expenseAmountUpdateInput.length() != 0) {
             double expenseAmountInputDouble = Double.parseDouble(expenseAmountUpdateInput.getText().toString());
             double expenseAmountInputRounded = Math.round(expenseAmountInputDouble * 100.0) / 100.0;        // Round to 2 decimal places
             long expenseAmountInputInCents = (long) (expenseAmountInputRounded * 100);                      // Store amount in cents
@@ -178,7 +175,7 @@ public class ModifyEntryFragment extends Fragment {
                     expenseDateUpdateInput.getText().toString(),
                     expenseNoteUpdateInput.getText().toString());
         } else {
-            Toast.makeText(getActivity(),"You must put something in the text field!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "You must select a category and enter an amount!", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -206,8 +203,12 @@ public class ModifyEntryFragment extends Fragment {
                 newBuilder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // Add category and return
-                        databaseHandler.addCategory(newCategoryInput.getText().toString());
+                        // Make sure category is not empty, add category and return
+                        if (newCategoryInput.getText().toString().length() != 0) {
+                            databaseHandler.addCategory(newCategoryInput.getText().toString());
+                        } else {
+                            Toast.makeText(getActivity(), "Please enter a category name!", Toast.LENGTH_LONG).show();
+                        }
                         dialogInterface.dismiss();
                     }
                 });
