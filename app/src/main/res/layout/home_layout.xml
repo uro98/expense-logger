@@ -32,61 +32,74 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:weightSum="100"
         android:gravity="center">
 
         <TextView
             android:id="@+id/budgetRemaining"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginLeft="10dp"
+            android:layout_height="wrap_content"
             android:text="Budget remaining: N/A"
             android:textSize="18sp"
             android:textColor="@color/colorDark"
-            android:layout_weight="6"
-            android:gravity="center_vertical"/>
+            android:gravity="center_vertical"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"/>
 
         <ListView
             android:id="@+id/expenseListView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_weight="82">
-
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+                <!-- Layout_weight="1" prevents ListView from covering up the rest of the screen -->
         </ListView>
 
         <TextView
             android:id="@+id/emptyListView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             android:text="No entries found"
             android:textSize="18sp"
             android:textColor="@color/colorDark"
-            android:layout_weight="82"
+            android:layout_weight="1"
             android:gravity="center"
             android:visibility="gone"/>
 
         <TextView
             android:id="@+id/totalSpent"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="6"
+            android:layout_height="wrap_content"
             android:text="Total spent: N/A"
             android:textAlignment="viewEnd"
             android:gravity="end|center_vertical"
             android:textColor="@color/colorDark"
-            android:textSize="18sp"/>
+            android:textSize="18sp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"/>
 
         <Button
             android:id="@+id/newEntryButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="New entry"
-            android:textAlignment="center"/>
+            android:text="@string/add_new_expense"
+            android:textAlignment="center"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:background="@drawable/round_corners_button"
+            android:textSize="20sp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"/>
 
     </LinearLayout>
 

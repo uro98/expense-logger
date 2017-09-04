@@ -12,4 +12,6 @@
     <color name="colorGrey">#2a3439</color>
     <color name="colorPink">#ff69b4</color>
     <color name="colorGold">#FFD700</color>
+    <color name="colorRed">#f00</color>
+
 </resources>

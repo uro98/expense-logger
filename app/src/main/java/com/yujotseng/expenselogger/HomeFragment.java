@@ -2,11 +2,16 @@ package com.yujotseng.expenselogger;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -110,11 +115,19 @@ public class HomeFragment extends Fragment {
 
             date.setText(calendarDate + "\n" + getDayFromDate(year, month, day));
             populateListView(calendarDate);
-            totalSpent.setText("Total spent: " + getTotalSpent(day + "/" + month + "/" + year));
+            String totalSpentString = "Total spent: " + getTotalSpent(day + "/" + month + "/" + year);
+            Spannable spannable = new SpannableString(totalSpentString);
+            spannable.setSpan(new ForegroundColorSpan(Color.RED), ("Total spent: ").length(),
+                    ("Total spent: " + getTotalSpent(day + "/" + month + "/" + year)).length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            totalSpent.setText(spannable, TextView.BufferType.SPANNABLE);
         } else {
             date.setText(getTodayDate() + "\n" + getTodayDayOfWeek());
             populateListView(getTodayDate());
-            totalSpent.setText("Total spent: " + getTotalSpent(getTodayDate()));
+            String totalSpentString = "Total spent: " + getTotalSpent(getTodayDate());
+            Spannable spannable = new SpannableString(totalSpentString);
+            spannable.setSpan(new ForegroundColorSpan(Color.RED), ("Total spent: ").length(),
+                    ("Total spent: " + getTotalSpent(getTodayDate())).length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            totalSpent.setText(spannable, TextView.BufferType.SPANNABLE);
         }
     }
 

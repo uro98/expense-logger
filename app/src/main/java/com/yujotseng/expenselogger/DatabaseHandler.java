@@ -9,7 +9,8 @@ import android.support.design.widget.TabLayout;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-    // todo: check memory leak, add selectionArgs, store date as integers, fragment navigation/stack, icons, amount in/under calendar
+    // todo: check memory leak, add selectionArgs, store date as integers, fragment navigation/stack, icons,
+    // todo: amount in/under calendar, default categories
 
     // Database info
     private static final int DATABASE_VERSION = 9;

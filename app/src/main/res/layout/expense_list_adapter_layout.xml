@@ -43,6 +43,7 @@
         android:layout_weight="25"
         android:textSize="15sp"
         android:maxLines="1"
-        android:ellipsize="end"/>
+        android:ellipsize="end"
+        android:textColor="@color/colorRed"/>
 
 </LinearLayout>
