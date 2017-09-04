@@ -9,12 +9,12 @@ import android.support.design.widget.TabLayout;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-    // todo: check memory leak, add selectionArgs, store date as integers, fragment navigation/stack, icons,
+    // todo: check memory leak, store date as integers, fragment navigation/stack, icons,
     // todo: amount in/under calendar, category management
     // todo: analysis, settings(budget)
 
     // Database info
-    private static final int DATABASE_VERSION = 14;
+    private static final int DATABASE_VERSION = 15;
     private static final String DATABASE_NAME = "expense.db";
 
     // Tables
@@ -75,7 +75,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public void deleteExpense(long _id) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
-        sqLiteDatabase.delete(TABLE_EXPENSE, COLUMN_ID + " = " + _id, null);
+
+        String selection = COLUMN_ID + " Like ?";
+        String[] selectionArgs = { Long.toString(_id) };
+        sqLiteDatabase.delete(TABLE_EXPENSE, selection, selectionArgs);
     }
 
     public int updateExpense(long _id, String category, long amount, String date, String note) {
@@ -87,7 +90,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         contentValues.put(COLUMN_DATE, date);
         contentValues.put(COLUMN_NOTE, note);
 
-        int i = sqLiteDatabase.update(TABLE_EXPENSE, contentValues, COLUMN_ID + " = " + _id, null);
+        String selection = COLUMN_ID + " LIKE ?";
+        String[] selectionArgs = { Long.toString(_id) };
+
+        int i = sqLiteDatabase.update(TABLE_EXPENSE, contentValues, selection, selectionArgs);
         return i;
     }
 
@@ -102,9 +108,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 COLUMN_AMOUNT
         };
 
-        String selection = COLUMN_DATE + " = '" + date + "'";
+        String selection = COLUMN_DATE + " = ?";
+        String[] selectionArgs = { date };
 
-        Cursor cursor = sqLiteDatabase.query(TABLE_EXPENSE, projection, selection, null, null, null, null);
+        Cursor cursor = sqLiteDatabase.query(TABLE_EXPENSE, projection, selection, selectionArgs, null, null, null);
 
         if (cursor != null) {
             cursor.moveToFirst();
@@ -125,9 +132,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 COLUMN_NOTE
         };
 
-        String selection = COLUMN_ID + " = " + _id;
+        String selection = COLUMN_ID + " = ?";
+        String[] selectionArgs = { Long.toString(_id) };
 
-        Cursor cursor = sqLiteDatabase.query(TABLE_EXPENSE, projection, selection, null, null, null, null);
+        Cursor cursor = sqLiteDatabase.query(TABLE_EXPENSE, projection, selection, selectionArgs, null, null, null);
 
         if (cursor != null) {
             cursor.moveToFirst();
@@ -146,7 +154,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public void deleteCategory(String categoryName) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
-        sqLiteDatabase.delete(TABLE_CATEGORY, COLUMN_CATEGORY + " = '" + categoryName + "'", null);
+
+        String selection = COLUMN_CATEGORY + " LIKE ?";
+        String[] selectionArgs = { categoryName };
+        sqLiteDatabase.delete(TABLE_CATEGORY, selection, selectionArgs);
     }
 
     public void updateCategory(String oldCategoryName, String newCategoryName) {
@@ -155,9 +166,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_CATEGORY, newCategoryName);
 
-        // Also update expense's categoryName
-        sqLiteDatabase.update(TABLE_CATEGORY, contentValues, COLUMN_CATEGORY + " = '" + oldCategoryName + "'", null);
-        sqLiteDatabase.update(TABLE_EXPENSE, contentValues, COLUMN_CATEGORY + " = '" + oldCategoryName + "'", null);
+        String selection = COLUMN_CATEGORY + " LIKE ?";
+        String[] selectionArgs = { oldCategoryName };
+
+        sqLiteDatabase.update(TABLE_CATEGORY, contentValues, selection, selectionArgs);
+        sqLiteDatabase.update(TABLE_EXPENSE, contentValues, selection, selectionArgs);      // Also update expenses' categoryName
     }
 
     // For categoryListView
