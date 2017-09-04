@@ -4,7 +4,6 @@
     <string name="add_new_category">+ New Category</string>
     <string name="analysis_toolbar">Analysis</string>
     <string name="setting_toolbar">Settings</string>
-
     <string name="expense_details">Expense Details</string>
     <string name="edit_expense">Edit Expense</string>
     <string name="new_expense">New Expense</string>
@@ -14,6 +13,8 @@
     <string name="hint_date">Date</string>
     <string name="save">Save</string>
     <string name="add_new_expense">Add New Expense</string>
+    <string name="button_edit">Edit</string>
+    <string name="button_delete">Delete</string>
 
 
 </resources>

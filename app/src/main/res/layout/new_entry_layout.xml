@@ -30,7 +30,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:paddingStart="20dp"
         android:paddingLeft="20dp"
         android:paddingEnd="20dp"
@@ -60,7 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:id="@+id/amountAndDate"
+            android:id="@+id/amountAndDateInput"
             android:layout_below="@+id/categoryLayout">
 
             <android.support.design.widget.TextInputLayout
@@ -111,7 +110,7 @@
             android:layout_height="wrap_content"
             app:hintTextAppearance="@style/FloatingLabelStyle"
             android:layout_marginTop="30dp"
-            android:layout_below="@+id/amountAndDate">
+            android:layout_below="@+id/amountAndDateInput">
 
             <EditText
                 android:layout_width="match_parent"
@@ -132,7 +131,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="40dp"
             style="@style/Widget.AppCompat.Button.Colored"
-            android:background="@drawable/round_corners_button"
+            android:background="@drawable/round_corners_gold_button"
             android:textSize="20sp"/>
 
     </RelativeLayout>
