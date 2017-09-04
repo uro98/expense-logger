@@ -10,11 +10,11 @@ import android.support.design.widget.TabLayout;
 public class DatabaseHandler extends SQLiteOpenHelper {
 
     // todo: check memory leak, add selectionArgs, store date as integers, fragment navigation/stack, icons,
-    // todo: amount in/under calendar, default categories, category management
+    // todo: amount in/under calendar, category management
     // todo: analysis, settings(budget)
 
     // Database info
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 14;
     private static final String DATABASE_NAME = "expense.db";
 
     // Tables
@@ -52,6 +52,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(CREATE_EXPENSE);
         sqLiteDatabase.execSQL(CREATE_CATEGORY);
+        addDefaultCategories(sqLiteDatabase);
     }
 
     @Override
@@ -174,5 +175,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
 
         return cursor;
+    }
+
+    public void addDefaultCategories(SQLiteDatabase sqLiteDatabase) {
+        ContentValues contentValues = new ContentValues();
+        String[] defaultCategories = {"Food", "Clothing", "Household", "Transport", "Education", "Entertainment"};
+        for(String defaultCategory : defaultCategories) {
+            contentValues.put(COLUMN_CATEGORY, defaultCategory);
+            sqLiteDatabase.insert(TABLE_CATEGORY, null, contentValues);
+        }
     }
 }
