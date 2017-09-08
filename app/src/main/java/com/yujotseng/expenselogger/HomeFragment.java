@@ -114,7 +114,9 @@ public class HomeFragment extends Fragment {
             day = bundle.getInt(DAY);
 
             date.setText(calendarDate + "\n" + getDayFromDate(year, month, day));
+
             populateListView(calendarDate);
+
             String totalSpentString = "Total spent: " + getTotalSpent(day + "/" + month + "/" + year);
             Spannable spannable = new SpannableString(totalSpentString);
             spannable.setSpan(new ForegroundColorSpan(Color.RED), ("Total spent: ").length(),
@@ -122,7 +124,9 @@ public class HomeFragment extends Fragment {
             totalSpent.setText(spannable, TextView.BufferType.SPANNABLE);
         } else {
             date.setText(getTodayDate() + "\n" + getTodayDayOfWeek());
+
             populateListView(getTodayDate());
+
             String totalSpentString = "Total spent: " + getTotalSpent(getTodayDate());
             Spannable spannable = new SpannableString(totalSpentString);
             spannable.setSpan(new ForegroundColorSpan(Color.RED), ("Total spent: ").length(),
