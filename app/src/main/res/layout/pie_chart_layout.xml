@@ -24,4 +24,11 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <com.github.mikephil.charting.charts.PieChart
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/pieChart">
+
+    </com.github.mikephil.charting.charts.PieChart>
+
 </LinearLayout>

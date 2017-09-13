@@ -14,7 +14,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // todo: analysis, settings(budget)
 
     // Database info
-    private static final int DATABASE_VERSION = 15;
+    private static final int DATABASE_VERSION = 16;
     private static final String DATABASE_NAME = "expense.db";
 
     // Tables
@@ -142,6 +142,47 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
 
         return cursor;
+    }
+
+    // For expense category pie chart
+    public Cursor getCategoriesOfMonth(int month, int year) {
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+
+        String[] projection = {
+                COLUMN_CATEGORY
+        };
+
+        String selection = COLUMN_DATE + " LIKE ?";
+        String[] selectionArgs = { "%" + month + "/" + year };
+
+        Cursor cursor = sqLiteDatabase.query(true, TABLE_EXPENSE, projection, selection, selectionArgs, null, null, null, null);
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+
+        return  cursor;
+    }
+
+    // For expense category pie chart
+    public Cursor getExpense(int month, int year) {
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+
+        String[] projection = {
+                COLUMN_CATEGORY,
+                COLUMN_AMOUNT
+        };
+
+        String selection = COLUMN_DATE + " LIKE ?";
+        String[] selectionArgs = { "%" + month + "/" + year };
+
+        Cursor cursor = sqLiteDatabase.query(TABLE_EXPENSE, projection, selection, selectionArgs, null, null, null);
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+
+        return  cursor;
     }
 
     // Category table CRUD
