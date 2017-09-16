@@ -16,7 +16,7 @@
     <string name="button_edit">Edit</string>
     <string name="button_delete">Delete</string>
     <string name="button_cancel">Cancel</string>
-    <string name="pie_chart_toolbar">Pie Chart</string>
+    <string name="pie_chart_toolbar">Monthly Expense Category Breakdown</string>
 
 
 </resources>

@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="30dp"
-    android:paddingBottom="30dp">
+    android:paddingTop="50dp"
+    android:paddingBottom="50dp">
 
     <ImageView
         android:layout_width="60dp"
@@ -18,8 +18,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Analysis"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
         android:id="@+id/analysisName"
         android:textColor="@color/colorDark"/>
 

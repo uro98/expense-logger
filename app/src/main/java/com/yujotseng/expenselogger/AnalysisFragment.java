@@ -33,7 +33,7 @@ public class AnalysisFragment extends Fragment {
         analysisGridView = view.findViewById(R.id.analysisGridView);
 
         // Set up gridView arrays
-        String[] analysisNames = {"Pie chart", "Bar chart", "List"};
+        String[] analysisNames = {"Monthly expense category breakdown", "Bar chart", "List"};
         int[] drawables = {R.drawable.ic_pie_chart_black_24dp, R.drawable.ic_assessment_black_24dp, R.drawable.ic_format_list_bulleted_black_24dp};
 
         // Create and set ListAdapter
