@@ -3,6 +3,7 @@ package com.yujotseng.expenselogger;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -13,6 +14,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
@@ -24,7 +27,9 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class PieChartFragment extends Fragment {
     private static final String TAG = "PieChartFragment";
@@ -34,9 +39,9 @@ public class PieChartFragment extends Fragment {
     private DatabaseHandler databaseHandler;
     private ArrayList<PieChartEntry> pieChartEntryArrayList;
     private NumberFormat numberFormat;
+    private double totalMonthAmount;
 
-    // category pie chart of the month
-    // x: category, y: percentage/amount
+    // todo: sort, overlap, (category on click list)
 
     @Nullable
     @Override
@@ -47,11 +52,86 @@ public class PieChartFragment extends Fragment {
         databaseHandler = new DatabaseHandler(getActivity());
 
         // Get UI
+        final TextView pieChartDate = view.findViewById(R.id.pieChartDate);
+        ImageView prevMonth = view.findViewById(R.id.prevButton);
+        ImageView nextMonth = view.findViewById(R.id.nextButton);
         pieChart = (PieChart) view.findViewById(R.id.pieChart);
 
-        // Get categories of the month, initialize the amount to 0 and put in ArrayList
-        Cursor categoryCursor = databaseHandler.getCategoriesOfMonth(9, 2017);
+        // Set UI
+        final Calendar calendar = Calendar.getInstance();
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM yyyy");
+        String pieChartDateString = simpleDateFormat.format(calendar.getTime());
+        pieChartDate.setText(pieChartDateString);
 
+        // Set image onClickListeners
+        prevMonth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Update UI
+                calendar.add(Calendar.MONTH, -1);
+                String monthName = simpleDateFormat.format(calendar.getTime());
+                pieChartDate.setText(monthName);
+
+                // Update pie chart
+                getPieChartData(calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR));
+                setCenterText();
+                addData();
+            }
+        });
+
+        nextMonth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Update UI
+                calendar.add(Calendar.MONTH, 1);
+                String monthName = simpleDateFormat.format(calendar.getTime());
+                pieChartDate.setText(monthName);
+
+                // Update pie chart
+                getPieChartData(calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR));
+                setCenterText();
+                addData();
+            }
+        });
+
+        getPieChartData(calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR));
+
+        // Set pie chart UI
+        setCenterText();
+        pieChart.setCenterTextSize(15);
+        pieChart.setHoleRadius(42);
+        Description description = new Description();
+        description.setText("Pie chart showing the percentage amount spent in each category this month");
+        pieChart.setDescription(description);
+        pieChart.getDescription().setTextSize(11);
+        pieChart.getDescription().setXOffset(8);
+        pieChart.getDescription().setYOffset(15);
+        pieChart.setEntryLabelColor(ContextCompat.getColor(getActivity(), R.color.colorDark));
+        pieChart.setExtraOffsets(5, 0, 5, 0);
+
+        addData();
+
+        // Remove legend
+        Legend legend = pieChart.getLegend();
+        legend.setEnabled(false);
+//        legend.setForm(Legend.LegendForm.CIRCLE);
+//        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+//        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+//        legend.setOrientation(Legend.LegendOrientation.VERTICAL);
+
+        return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        Log.d(TAG, "onDestroyView: ");
+        super.onDestroyView();
+        view = null;
+    }
+
+    private void getPieChartData(int month, int year) {
+        // Get categories of the month, initialize the amount to 0 and put in ArrayList
+        Cursor categoryCursor = databaseHandler.getCategoriesOfMonth(month, year);
         pieChartEntryArrayList = new ArrayList<>();
         if (categoryCursor.moveToFirst()) {
             do {
@@ -61,10 +141,11 @@ public class PieChartFragment extends Fragment {
                 pieChartEntryArrayList.add(pieChartEntry);
             } while (categoryCursor.moveToNext());
         }
+        categoryCursor.close();
 
         // Get expenses of the month, sort their amounts into category amounts
-        Cursor expenseCursor = databaseHandler.getExpense(9, 2017);
-        double totalMonthAmount = 0;
+        Cursor expenseCursor = databaseHandler.getExpense(month, year);
+        totalMonthAmount = 0;
         if (expenseCursor.moveToFirst()) {
             do {
                 // Get cursor properties for each expense
@@ -86,14 +167,17 @@ public class PieChartFragment extends Fragment {
                 }
             } while (expenseCursor.moveToNext());
         }
+        expenseCursor.close();
+        databaseHandler.close();
 
         // Update category percentages
         for (PieChartEntry pieChartEntry : pieChartEntryArrayList) {
             float percentage = (float) (pieChartEntry.getAmount() / totalMonthAmount * 100);
             pieChartEntry.setPercentage(percentage);
         }
+    }
 
-        // Set UI
+    private void setCenterText() {
         numberFormat = NumberFormat.getCurrencyInstance();
         String totalMonthAmountFormatted = numberFormat.format(totalMonthAmount);
         String totalSpentString = "Total spent: " + totalMonthAmountFormatted;
@@ -101,34 +185,6 @@ public class PieChartFragment extends Fragment {
         spannable.setSpan(new ForegroundColorSpan(Color.RED), ("Total spent: ").length(),
                 ("Total spent: " + totalMonthAmountFormatted).length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         pieChart.setCenterText(spannable);
-        pieChart.setCenterTextSize(15);
-        pieChart.setHoleRadius(42);
-        Description description = new Description();
-        description.setText("Pie chart showing the percentage amount spent in each category this month");
-        pieChart.setDescription(description);
-        pieChart.getDescription().setTextSize(11);
-        pieChart.getDescription().setXOffset(8);
-        pieChart.getDescription().setYOffset(15);
-        pieChart.setEntryLabelColor(ContextCompat.getColor(getActivity(), R.color.colorDark));
-
-        addData();
-
-        // Remove legend
-        Legend legend = pieChart.getLegend();
-        legend.setEnabled(false);
-//        legend.setForm(Legend.LegendForm.CIRCLE);
-//        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
-//        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
-//        legend.setOrientation(Legend.LegendOrientation.VERTICAL);
-
-        return view;
-    }
-
-    @Override
-    public void onDestroyView() {
-        Log.d(TAG, "onDestroyView: ");
-        super.onDestroyView();
-        view = null;
     }
 
     private void addData() {
@@ -155,6 +211,12 @@ public class PieChartFragment extends Fragment {
         PieDataSet pieDataSet = new PieDataSet(pieEntries, "Monthly Expense Category Breakdown");
         pieDataSet.setSliceSpace(3);
         pieDataSet.setColors(colors);
+//        pieDataSet.setValueLinePart1OffsetPercentage(0);
+//        pieDataSet.setValueLinePart1Length(0f);
+//        pieDataSet.setValueLinePart2Length(0f);
+//        pieDataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+//        pieDataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+
 
         PieData pieData = new PieData(pieDataSet);
         pieData.setValueFormatter(new PercentFormatter());

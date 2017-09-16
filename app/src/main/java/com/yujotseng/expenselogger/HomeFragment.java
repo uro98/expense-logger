@@ -166,9 +166,6 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 callback.passID(l, true);
-
-//                Cursor item = (Cursor) reminderCursorAdapter.getItem(position);
-//                Log.d("Clicked item field", " "+ item.getColumn(your column index));
             }
         });
     }
