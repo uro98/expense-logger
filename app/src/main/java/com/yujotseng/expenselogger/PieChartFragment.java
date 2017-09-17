@@ -30,6 +30,7 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 
 public class PieChartFragment extends Fragment {
     private static final String TAG = "PieChartFragment";
@@ -189,6 +190,9 @@ public class PieChartFragment extends Fragment {
 
     private void addData() {
         ArrayList<PieEntry> pieEntries = new ArrayList<>();
+
+        // Sort pieChartEntryArrayList to order pieChartEntries from largest amount spent in the category to smallest
+        Collections.sort(pieChartEntryArrayList);
 
         for (PieChartEntry pieChartEntry : pieChartEntryArrayList) {
             pieEntries.add(new PieEntry(pieChartEntry.getPercentage(), pieChartEntry.getCategory() + " (" + numberFormat.format(pieChartEntry.getAmount()) + ")"));

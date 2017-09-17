@@ -42,6 +42,11 @@ public class PieChartEntry implements Comparable<PieChartEntry> {
 
     @Override
     public int compareTo(@NonNull PieChartEntry pieChartEntry) {
-        return 0;
+
+        int pieChartEntryPercentage = Math.round(pieChartEntry.getPercentage() * 10);       // Multiply by 10 because percentage has just 1 decimal point in pie chart
+        int thisPercentage = Math.round(this.percentage * 10);
+
+        // Descending order
+        return pieChartEntryPercentage - thisPercentage;
     }
 }
