@@ -223,6 +223,7 @@ public class PieChartFragment extends Fragment {
         pieData.setValueTextSize(12);
 
         pieChart.setData(pieData);
+        pieChart.highlightValues(null);
         pieChart.invalidate();
     }
 }

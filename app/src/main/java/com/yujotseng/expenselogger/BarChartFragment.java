@@ -174,6 +174,7 @@ public class BarChartFragment extends Fragment {
         barData.setValueFormatter(new CurrencyFormatter());
         barData.setValueTextSize(10);
         barChart.setData(barData);
+        barChart.highlightValues(null);
         barChart.invalidate();
     }
 
