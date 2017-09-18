@@ -6,12 +6,12 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.text.NumberFormat;
 
-public class TwoDecimalFormatter implements IValueFormatter {
-    private static final String TAG = "TwoDecimalFormatter";
+public class CurrencyFormatter implements IValueFormatter {
+    private static final String TAG = "CurrencyFormatter";
 
     private NumberFormat numberFormat;
 
-    public TwoDecimalFormatter() {
+    public CurrencyFormatter() {
         numberFormat = NumberFormat.getCurrencyInstance();
     }
 

@@ -9,7 +9,7 @@ import android.support.design.widget.TabLayout;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-    // todo: check memory leak, store date as integers, fragment navigation/stack, icons,
+    // todo: check memory leak, fragment navigation/stack, icons,
     // todo: amount in/under calendar, category management
     // todo: analysis, settings(budget)
 

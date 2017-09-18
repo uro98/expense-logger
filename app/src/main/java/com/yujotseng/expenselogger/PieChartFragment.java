@@ -106,16 +106,15 @@ public class PieChartFragment extends Fragment {
         pieChart.setEntryLabelColor(ContextCompat.getColor(getActivity(), R.color.colorDark));
         pieChart.setExtraOffsets(5, 0, 5, 0);
 
-        addData();
-
-        // Remove legend
         Legend legend = pieChart.getLegend();
-        legend.setEnabled(false);
+        legend.setEnabled(false);       // Remove legend
 //        legend.setForm(Legend.LegendForm.CIRCLE);
 //        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
 //        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
 //        legend.setOrientation(Legend.LegendOrientation.VERTICAL);
 //        legend.setWordWrapEnabled(true);
+
+        addData();
 
         return view;
     }

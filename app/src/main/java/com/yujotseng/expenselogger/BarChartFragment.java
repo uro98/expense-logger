@@ -1,10 +1,14 @@
 package com.yujotseng.expenselogger;
 
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,17 +24,12 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.mikephil.charting.formatter.PercentFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 
 // x: month, y: amount
 
@@ -42,6 +41,8 @@ public class BarChartFragment extends Fragment {
     private BarChart barChart;
     private Cursor expenseCursor;
     private ArrayList<String> months;
+    private double totalYearAmount;
+    private TextView barChartTotalSpent;
 
     @Nullable
     @Override
@@ -53,6 +54,7 @@ public class BarChartFragment extends Fragment {
 
         // Get UI
         final TextView barChartDate = view.findViewById(R.id.barChartDate);
+        barChartTotalSpent = view.findViewById(R.id.barChartTotalSpent);
         ImageView prevYear = view.findViewById(R.id.prevYear);
         ImageView nextYear = view.findViewById(R.id.nextYear);
         barChart = (BarChart) view.findViewById(R.id.barChart);
@@ -74,6 +76,7 @@ public class BarChartFragment extends Fragment {
 
                 // Update bar chart
                 addData(calendar.get(Calendar.YEAR));
+                setTotalSpent();
             }
         });
 
@@ -87,8 +90,14 @@ public class BarChartFragment extends Fragment {
 
                 // Update bar chart
                 addData(calendar.get(Calendar.YEAR));
+                setTotalSpent();
             }
         });
+
+        addData(calendar.get(Calendar.YEAR));
+
+        // Set UI
+        setTotalSpent();
 
         // Set bar chart UI
         Description description = new Description();
@@ -97,10 +106,8 @@ public class BarChartFragment extends Fragment {
         barChart.setPinchZoom(false);
         barChart.setScaleEnabled(false);
 
-        addData(calendar.get(Calendar.YEAR));
-
         Legend legend = barChart.getLegend();
-        legend.setEnabled(false);
+        legend.setEnabled(false);       // Remove legend
 
         XAxis xAxis = barChart.getXAxis();
         xAxis.setLabelCount(12);
@@ -126,6 +133,7 @@ public class BarChartFragment extends Fragment {
 
     private void addData(int year) {
         ArrayList<BarEntry> barEntries = new ArrayList<>();
+        totalYearAmount = 0;
 
         for (int i=1; i<=12; i++) {
             // Get total expense amount of each month and add to barEntries
@@ -140,6 +148,7 @@ public class BarChartFragment extends Fragment {
                     totalMonthAmount += amountModified;
                 } while (expenseCursor.moveToNext());
             }
+            totalYearAmount += totalMonthAmount;
             barEntries.add(new BarEntry(i-1, (float) totalMonthAmount));
         }
         expenseCursor.close();
@@ -162,9 +171,19 @@ public class BarChartFragment extends Fragment {
         BarDataSet barDataSet = new BarDataSet(barEntries, "Expense");
         barDataSet.setColor(ContextCompat.getColor(getActivity(), R.color.colorChartGreen));
         BarData barData = new BarData(barDataSet);
-        barData.setValueFormatter(new TwoDecimalFormatter());
+        barData.setValueFormatter(new CurrencyFormatter());
         barData.setValueTextSize(10);
         barChart.setData(barData);
         barChart.invalidate();
+    }
+
+    private void setTotalSpent() {
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
+        String totalYearAmountFormatted = numberFormat.format(totalYearAmount);
+        String totalSpentString = "Total spent: " + totalYearAmountFormatted;
+        Spannable spannable = new SpannableString(totalSpentString);
+        spannable.setSpan(new ForegroundColorSpan(Color.RED), ("Total spent: ").length(),
+                ("Total spent: " + totalYearAmountFormatted).length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        barChartTotalSpent.setText(spannable, TextView.BufferType.SPANNABLE);
     }
 }

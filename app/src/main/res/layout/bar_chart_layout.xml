@@ -64,6 +64,15 @@
 
     </LinearLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:text="Total spent: N/A"
+        android:textColor="@color/colorDark"
+        android:gravity="center"
+        android:id="@+id/barChartTotalSpent"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
