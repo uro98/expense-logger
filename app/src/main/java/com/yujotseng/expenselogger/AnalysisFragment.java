@@ -22,7 +22,7 @@ public class AnalysisFragment extends Fragment {
 
     private View view;
     private GridView analysisGridView;
-    private Fragment pieChartFragment;
+    private Fragment fragment;
 
     @Nullable
     @Override
@@ -33,7 +33,7 @@ public class AnalysisFragment extends Fragment {
         analysisGridView = view.findViewById(R.id.analysisGridView);
 
         // Set up gridView arrays
-        String[] analysisNames = {"Monthly expense category breakdown", "Bar chart", "List"};
+        String[] analysisNames = {"Monthly expense category breakdown", "Yearly expense overview", "List"};
         int[] drawables = {R.drawable.ic_pie_chart_black_24dp, R.drawable.ic_assessment_black_24dp, R.drawable.ic_format_list_bulleted_black_24dp};
 
         // Create and set ListAdapter
@@ -46,13 +46,18 @@ public class AnalysisFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i) {
                     case 0:
-                        pieChartFragment = getFragmentManager().findFragmentByTag("PieChartFragment");
-                        if (pieChartFragment == null) {
-                            pieChartFragment = new PieChartFragment();
+                        fragment = getFragmentManager().findFragmentByTag("PieChartFragment");
+                        if (fragment == null) {
+                            fragment = new PieChartFragment();
                         }
-                        switchFragment(pieChartFragment);
+                        switchFragment(fragment);
                         break;
                     case 1:
+                        fragment = getFragmentManager().findFragmentByTag("BarChartFragment");
+                        if (fragment == null) {
+                            fragment = new BarChartFragment();
+                        }
+                        switchFragment(fragment);
                         break;
                     case 2:
                         break;

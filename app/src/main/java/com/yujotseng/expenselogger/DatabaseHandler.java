@@ -164,7 +164,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return  cursor;
     }
 
-    // For expense category pie chart
+    // For expense analyses by time
     public Cursor getExpense(int month, int year) {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
 

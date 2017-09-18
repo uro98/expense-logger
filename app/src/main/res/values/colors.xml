@@ -13,5 +13,6 @@
     <color name="colorPink">#ff69b4</color>
     <color name="colorGold">#FFD700</color>
     <color name="colorRed">#f00</color>
+    <color name="colorChartGreen">#C0FF8C</color>
 
 </resources>

@@ -3,7 +3,6 @@ package com.yujotseng.expenselogger;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -42,7 +41,7 @@ public class PieChartFragment extends Fragment {
     private NumberFormat numberFormat;
     private double totalMonthAmount;
 
-    // todo: sort, overlap, (category on click list)
+    // todo: overlap, (category on click list)
 
     @Nullable
     @Override
@@ -54,8 +53,8 @@ public class PieChartFragment extends Fragment {
 
         // Get UI
         final TextView pieChartDate = view.findViewById(R.id.pieChartDate);
-        ImageView prevMonth = view.findViewById(R.id.prevButton);
-        ImageView nextMonth = view.findViewById(R.id.nextButton);
+        ImageView prevMonth = view.findViewById(R.id.prevMonth);
+        ImageView nextMonth = view.findViewById(R.id.nextMonth);
         pieChart = (PieChart) view.findViewById(R.id.pieChart);
 
         // Set UI
@@ -102,11 +101,8 @@ public class PieChartFragment extends Fragment {
         pieChart.setCenterTextSize(15);
         pieChart.setHoleRadius(42);
         Description description = new Description();
-        description.setText("Pie chart showing the percentage amount spent in each category this month");
+        description.setText("");
         pieChart.setDescription(description);
-        pieChart.getDescription().setTextSize(11);
-        pieChart.getDescription().setXOffset(8);
-        pieChart.getDescription().setYOffset(15);
         pieChart.setEntryLabelColor(ContextCompat.getColor(getActivity(), R.color.colorDark));
         pieChart.setExtraOffsets(5, 0, 5, 0);
 
@@ -119,6 +115,7 @@ public class PieChartFragment extends Fragment {
 //        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
 //        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
 //        legend.setOrientation(Legend.LegendOrientation.VERTICAL);
+//        legend.setWordWrapEnabled(true);
 
         return view;
     }
