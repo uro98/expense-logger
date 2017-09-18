@@ -1,2 +1,2 @@
 # Expense Logger
-An Android app for logging expenses
+An Android app that improves financial management
