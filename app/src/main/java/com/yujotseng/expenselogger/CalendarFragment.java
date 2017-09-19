@@ -43,11 +43,11 @@ public class CalendarFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        // Make sure host activity implements PassDateListener interface, otherwise throw exception
+        // Make sure host activity implements PassDataListener interface, otherwise throw exception
         try {
             callback = (HomeFragment.PassDataListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement OnListItemSelectedListener");
+            throw new ClassCastException(context.toString() + " must implement PassDataListener");
         }
     }
 

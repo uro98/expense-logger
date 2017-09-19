@@ -32,12 +32,17 @@
         android:orientation="vertical"
         android:gravity="center">
 
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/allExpenseSearch"
+            />
+
         <ListView
             android:id="@+id/allExpenseListView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-                <!-- Layout_weight="1" prevents ListView from covering up the rest of the screen -->
+            android:layout_height="wrap_content">
+
         </ListView>
 
         <TextView
@@ -52,21 +57,6 @@
             android:layout_weight="1"
             android:gravity="center"
             android:visibility="gone"/>
-
-        <Button
-            android:id="@+id/newEntryButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/add_new_expense"
-            android:textAlignment="center"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:background="@drawable/round_corners_gold_button"
-            android:textSize="20sp"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="20dp"/>
 
     </LinearLayout>
 

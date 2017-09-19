@@ -1,14 +1,18 @@
 package com.yujotseng.expenselogger;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import java.text.NumberFormat;
@@ -23,6 +27,7 @@ public class ListFragment extends Fragment {
     private ListView allExpenseListView;
     private HomeFragment.PassDataListener callback;
     private ArrayList<Expense> expenseArrayList;
+    private HoldExpenseListAdapter holdExpenseListAdapter;
 
     // Top expenses, can search note (if search term matches category name, filter by category)
 
@@ -35,12 +40,42 @@ public class ListFragment extends Fragment {
         databaseHandler = new DatabaseHandler(getActivity());
 
         // Get UI
-        allExpenseListView = (ListView) view.findViewById(R.id.allExpenseListView);
+        EditText allExpenseSearch = view.findViewById(R.id.allExpenseSearch);
+        allExpenseListView = view.findViewById(R.id.allExpenseListView);
         allExpenseListView.setEmptyView(view.findViewById(R.id.allEmptyListView));
 
         populateListView();
 
+        // Filter allExpenseListView by the text entered in allExpenseSearch
+        allExpenseSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                holdExpenseListAdapter.getFilter().filter(charSequence);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         return view;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        // Make sure host activity implements PassDataListener interface, otherwise throw exception
+        try {
+            callback = (HomeFragment.PassDataListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement PassDataListener");
+        }
     }
 
     @Override
@@ -57,6 +92,8 @@ public class ListFragment extends Fragment {
         if (cursor.moveToFirst()) {
             do {
                 // Get properties from cursor
+                int idIndex = cursor.getColumnIndex("_id");
+                long id = cursor.getLong(idIndex);
                 int categoryIndex = cursor.getColumnIndex("_category");
                 String category = cursor.getString(categoryIndex);
                 int noteIndex = cursor.getColumnIndex("_note");
@@ -70,6 +107,7 @@ public class ListFragment extends Fragment {
                 long amountInCents = cursor.getLong(amountIndex);
 
                 Expense expense = new Expense(category, amountInCents, "9/19/2017", note);
+                expense.setId(id);
                 expenseArrayList.add(expense);
             } while (cursor.moveToNext());
         }
@@ -80,14 +118,15 @@ public class ListFragment extends Fragment {
         Collections.sort(expenseArrayList);
 
         // Create and set ListAdapter
-        HoldExpenseListAdapter holdExpenseListAdapter = new HoldExpenseListAdapter(getActivity(), R.layout.expense_list_adapter_layout, expenseArrayList);
+        holdExpenseListAdapter = new HoldExpenseListAdapter(getActivity(), R.layout.expense_list_adapter_layout, expenseArrayList);
         allExpenseListView.setAdapter(holdExpenseListAdapter);
 
         // Add onItemClickListener to ListView
         allExpenseListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                callback.passID(l, true);
+                long expenseID = ((ListView) adapterView).getAdapter().getItemId(i);
+                callback.passID(expenseID, true);
             }
         });
     }
