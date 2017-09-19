@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -40,27 +41,23 @@ public class ListFragment extends Fragment {
         databaseHandler = new DatabaseHandler(getActivity());
 
         // Get UI
-        EditText allExpenseSearch = view.findViewById(R.id.allExpenseSearch);
+        SearchView searchView = view.findViewById(R.id.searchView);
         allExpenseListView = view.findViewById(R.id.allExpenseListView);
         allExpenseListView.setEmptyView(view.findViewById(R.id.allEmptyListView));
 
         populateListView();
 
-        // Filter allExpenseListView by the text entered in allExpenseSearch
-        allExpenseSearch.addTextChangedListener(new TextWatcher() {
+        // Filter allExpenseListView by the text entered in searchView
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+            public boolean onQueryTextSubmit(String query) {
+                return false;
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                holdExpenseListAdapter.getFilter().filter(charSequence);
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
+            public boolean onQueryTextChange(String newText) {
+                holdExpenseListAdapter.getFilter().filter(newText);
+                return false;
             }
         });
 

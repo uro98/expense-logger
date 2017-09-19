@@ -32,16 +32,26 @@
         android:orientation="vertical"
         android:gravity="center">
 
-        <EditText
+        <android.support.v7.widget.SearchView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/allExpenseSearch"
-            />
+            app:iconifiedByDefault="false"
+            app:queryHint="@string/hint_search"
+            android:id="@+id/searchView"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp">
+
+        </android.support.v7.widget.SearchView>
 
         <ListView
             android:id="@+id/allExpenseListView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
         </ListView>
 
