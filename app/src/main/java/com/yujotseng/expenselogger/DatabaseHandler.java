@@ -14,7 +14,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // todo: analysis, settings(budget)
 
     // Database info
-    private static final int DATABASE_VERSION = 16;
+    private static final int DATABASE_VERSION = 17;
     private static final String DATABASE_NAME = "expense.db";
 
     // Tables
@@ -183,6 +183,26 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
 
         return  cursor;
+    }
+
+    // For allExpenseListView
+    public Cursor getExpense() {
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+
+        String[] projection = {
+                COLUMN_ID,
+                COLUMN_CATEGORY,
+                COLUMN_NOTE,
+                COLUMN_AMOUNT
+        };
+
+        Cursor cursor = sqLiteDatabase.query(TABLE_EXPENSE, projection, null, null, null, null, null);
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+
+        return cursor;
     }
 
     // Category table CRUD

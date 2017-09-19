@@ -21,5 +21,6 @@
     <string name="pie_chart_description">Pie chart showing the percentage amount spent in each category this month</string>
     <string name="bar_chart_description">Bar chart showing the amount spent each month this year</string>
     <string name="bar_chart_yaxis_title">Amount spent</string>
+    <string name="list_toolbar">All Expenses</string>
 
 </resources>

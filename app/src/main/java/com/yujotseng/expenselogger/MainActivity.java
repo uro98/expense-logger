@@ -118,9 +118,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Pass
             bundle.putInt(HomeFragment.DAY, day);
             homeFragment.setArguments(bundle);
 
-            // Change bottomNavigationView menuItem highlight
-            bottomNavigationView.setSelectedItemId(R.id.action_home);
-
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragmentContainer, homeFragment);
             transaction.commit();

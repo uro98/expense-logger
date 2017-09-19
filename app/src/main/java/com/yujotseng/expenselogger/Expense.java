@@ -1,6 +1,8 @@
 package com.yujotseng.expenselogger;
 
-public class Expense {
+import android.support.annotation.NonNull;
+
+public class Expense implements Comparable<Expense> {
 
     private long id;
     private String category;
@@ -53,5 +55,15 @@ public class Expense {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    @Override
+    public int compareTo(@NonNull Expense expense) {
+
+        int expenseAmount = (int) expense.getAmount();
+        int thisAmount = (int) this.amount;
+
+        // Descending order
+        return expenseAmount - thisAmount;
     }
 }

@@ -21,7 +21,6 @@ public class AnalysisFragment extends Fragment {
     private static final String TAG = "AnalysisFragment";
 
     private View view;
-    private GridView analysisGridView;
     private Fragment fragment;
 
     @Nullable
@@ -30,10 +29,10 @@ public class AnalysisFragment extends Fragment {
         view = inflater.inflate(R.layout.analysis_layout, container, false);
 
         // Get UI
-        analysisGridView = view.findViewById(R.id.analysisGridView);
+        GridView analysisGridView = view.findViewById(R.id.analysisGridView);
 
         // Set up gridView arrays
-        String[] analysisNames = {"Monthly expense category breakdown", "Yearly expense overview", "List"};
+        String[] analysisNames = {"Monthly expense category breakdown", "Yearly expense overview", "All expenses"};
         int[] drawables = {R.drawable.ic_pie_chart_black_24dp, R.drawable.ic_assessment_black_24dp, R.drawable.ic_format_list_bulleted_black_24dp};
 
         // Create and set ListAdapter
@@ -60,6 +59,11 @@ public class AnalysisFragment extends Fragment {
                         switchFragment(fragment);
                         break;
                     case 2:
+                        fragment = getFragmentManager().findFragmentByTag("ListFragment");
+                        if (fragment == null) {
+                            fragment = new ListFragment();
+                        }
+                        switchFragment(fragment);
                         break;
                 }
             }
