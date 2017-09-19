@@ -11,7 +11,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // todo: check memory leak, fragment navigation/stack, icons,
     // todo: amount in/under calendar, category management
-    // todo: analysis, settings(budget)
+    // todo: settings(budget)
 
     // Database info
     private static final int DATABASE_VERSION = 17;

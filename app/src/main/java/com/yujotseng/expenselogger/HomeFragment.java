@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -40,7 +41,6 @@ public class HomeFragment extends Fragment {
     public static final String DAY = "_day";
 
     private View view;
-    private Button newEntryButton;
     private Fragment fragment;
     private DatabaseHandler databaseHandler;
     private ListView expenseListView;
@@ -48,8 +48,6 @@ public class HomeFragment extends Fragment {
     private TextView date;
     private TextView totalSpent;
     private Calendar calendar;
-    private String calendarDate;
-    private Cursor cursor;
     private Bundle bundle;
     private int year;
     private int month;
@@ -74,9 +72,11 @@ public class HomeFragment extends Fragment {
         // Get UI
         date = (TextView) view.findViewById(R.id.date);
         totalSpent = (TextView) view.findViewById(R.id.totalSpent);
-        newEntryButton = (Button) view.findViewById(R.id.newEntryButton);
+        Button newEntryButton = (Button) view.findViewById(R.id.newEntryButton);
         expenseListView = (ListView) view.findViewById(R.id.expenseListView);
         expenseListView.setEmptyView(view.findViewById(R.id.emptyListView));
+        ImageView prevDay = view.findViewById(R.id.prevDay);
+        ImageView nextDay = view.findViewById(R.id.nextDay);
 
         // Get NewEntryFragment
         fragment = getFragmentManager().findFragmentByTag("NewEntryFragment");
@@ -84,7 +84,7 @@ public class HomeFragment extends Fragment {
             fragment = new NewEntryFragment();
         }
 
-        // Set button onClickListener
+        // Set onClickListeners
         newEntryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -100,6 +100,68 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        prevDay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Update UI
+                Calendar cal = Calendar.getInstance();
+                String[] splitDate = date.getText().toString().split("\n");     // Split date by line break to get only the date (drop day of week name)
+                String[] splitDateNumbers = splitDate[0].split("/");            // Split date by forward slash into day, month and year
+                cal.set(Integer.parseInt(splitDateNumbers[2]), Integer.parseInt(splitDateNumbers[1]) - 1, Integer.parseInt(splitDateNumbers[0]));
+                cal.add(Calendar.DAY_OF_MONTH, -1);
+
+                int newYear = cal.get(Calendar.YEAR);
+                int newMonth = cal.get(Calendar.MONTH);
+                int newDay = cal.get(Calendar.DAY_OF_MONTH);
+                newMonth++;    // MONTH starts from 0
+                String newDate = newDay + "/" + newMonth + "/" + newYear;
+
+                Log.d(TAG, "onClick: " + newDate);
+
+                date.setText(newDate + "\n" + getDayFromDate(newYear, newMonth, newDay));
+
+                // Update list
+                populateListView(newDate);
+
+                // Update total spent
+                String totalSpentString = "Total spent: " + getTotalSpent(newDay + "/" + newMonth + "/" + newYear);
+                Spannable spannable = new SpannableString(totalSpentString);
+                spannable.setSpan(new ForegroundColorSpan(Color.RED), ("Total spent: ").length(),
+                        ("Total spent: " + getTotalSpent(newDay + "/" + newMonth + "/" + newYear)).length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                totalSpent.setText(spannable, TextView.BufferType.SPANNABLE);
+            }
+        });
+
+        nextDay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Update UI
+                Calendar cal = Calendar.getInstance();
+                String[] splitDate = date.getText().toString().split("\n");     // Split date by line break to get only the date (drop day of week name)
+                String[] splitDateNumbers = splitDate[0].split("/");            // Split date by forward slash into day, month and year
+                cal.set(Integer.parseInt(splitDateNumbers[2]), Integer.parseInt(splitDateNumbers[1]) - 1, Integer.parseInt(splitDateNumbers[0]));
+                cal.add(Calendar.DAY_OF_MONTH, 1);
+
+                int newYear = cal.get(Calendar.YEAR);
+                int newMonth = cal.get(Calendar.MONTH);
+                int newDay = cal.get(Calendar.DAY_OF_MONTH);
+                newMonth++;    // MONTH starts from 0
+                String newDate = newDay + "/" + newMonth + "/" + newYear;
+
+                date.setText(newDate + "\n" + getDayFromDate(newYear, newMonth, newDay));
+
+                // Update list
+                populateListView(newDate);
+
+                // Update total spent
+                String totalSpentString = "Total spent: " + getTotalSpent(newDay + "/" + newMonth + "/" + newYear);
+                Spannable spannable = new SpannableString(totalSpentString);
+                spannable.setSpan(new ForegroundColorSpan(Color.RED), ("Total spent: ").length(),
+                        ("Total spent: " + getTotalSpent(newDay + "/" + newMonth + "/" + newYear)).length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                totalSpent.setText(spannable, TextView.BufferType.SPANNABLE);
+            }
+        });
+
         return view;
     }
 
@@ -108,7 +170,7 @@ public class HomeFragment extends Fragment {
         super.onStart();
         bundle = getArguments();
         if (bundle != null) {
-            calendarDate = bundle.getString(DATE);
+            String calendarDate = bundle.getString(DATE);
             year = bundle.getInt(YEAR);
             month = bundle.getInt(MONTH);
             day = bundle.getInt(DAY);
@@ -117,6 +179,7 @@ public class HomeFragment extends Fragment {
 
             populateListView(calendarDate);
 
+            // Set total spent
             String totalSpentString = "Total spent: " + getTotalSpent(day + "/" + month + "/" + year);
             Spannable spannable = new SpannableString(totalSpentString);
             spannable.setSpan(new ForegroundColorSpan(Color.RED), ("Total spent: ").length(),
@@ -127,6 +190,7 @@ public class HomeFragment extends Fragment {
 
             populateListView(getTodayDate());
 
+            // Set total spent
             String totalSpentString = "Total spent: " + getTotalSpent(getTodayDate());
             Spannable spannable = new SpannableString(totalSpentString);
             spannable.setSpan(new ForegroundColorSpan(Color.RED), ("Total spent: ").length(),
@@ -155,7 +219,7 @@ public class HomeFragment extends Fragment {
 
     private void populateListView(String date) {
         // Get expenses
-        cursor = databaseHandler.getExpense(date);
+        Cursor cursor = databaseHandler.getExpense(date);
 
         // Create and set ListAdapter
         ExpenseListAdapter expenseListAdapter = new ExpenseListAdapter(getActivity(), cursor);
@@ -199,7 +263,7 @@ public class HomeFragment extends Fragment {
         NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
         long totalSpentInCents = 0;
         String amount;
-        cursor = databaseHandler.getExpense(date);
+        Cursor cursor = databaseHandler.getExpense(date);
         if (cursor.moveToFirst()) {
             do {
                 int amountIndex = cursor.getColumnIndex("_amount");
