@@ -31,5 +31,8 @@ dependencies {
 
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
 
+    compile 'com.android.support:preference-v7:26.0.1'
+    compile 'com.android.support:preference-v14:26.0.1'
+
     testCompile 'junit:junit:4.12'
 }

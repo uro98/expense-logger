@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="preferenceTheme">@style/SettingsTheme</item>
     </style>
 
     <style name="DatePickerTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
@@ -19,6 +20,10 @@
     
     <style name="EditTextStyle" parent="Theme.AppCompat.Light">
         <item name="colorControlActivated">@color/colorPrimary</item>
+    </style>
+
+    <style name="SettingsTheme" parent="PreferenceThemeOverlay.v14.Material">
+        <item name="android:layout">@layout/settings_layout</item>
     </style>
 
 </resources>
