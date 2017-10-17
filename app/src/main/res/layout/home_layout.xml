@@ -67,20 +67,20 @@
         android:orientation="vertical"
         android:gravity="center">
 
-        <TextView
-            android:id="@+id/budgetRemaining"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Budget remaining: N/A"
-            android:textSize="18sp"
-            android:textColor="@color/colorDark"
-            android:gravity="center_vertical"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"/>
+        <!--<TextView-->
+            <!--android:id="@+id/budgetRemaining"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Budget remaining: N/A"-->
+            <!--android:textSize="18sp"-->
+            <!--android:textColor="@color/colorDark"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:layout_marginStart="20dp"-->
+            <!--android:layout_marginLeft="20dp"-->
+            <!--android:layout_marginEnd="20dp"-->
+            <!--android:layout_marginRight="20dp"-->
+            <!--android:layout_marginTop="15dp"-->
+            <!--android:layout_marginBottom="15dp"/>-->
 
         <ListView
             android:id="@+id/expenseListView"

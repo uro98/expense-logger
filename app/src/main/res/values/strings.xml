@@ -26,8 +26,10 @@
     <string name="settings_budget">Budget setting</string>
     <string name="budget_edittext">Monthly budget</string>
     <string name="budget">Budget</string>
+    <string name="add_category_uppercase">Add New Category</string>
     <string name="add_category">Add new category</string>
     <string name="modify_category">Modify category</string>
     <string name="delete_category">Delete category</string>
+    <string name="category_name">Category Name</string>
 
 </resources>

@@ -16,9 +16,9 @@
         android:icon="@drawable/ic_assessment_black_24dp"
         android:title="Analysis">
     </item>
-    <item
-        android:id="@+id/action_settings"
-        android:icon="@drawable/ic_settings_black_24dp"
-        android:title="Settings">
-    </item>
+    <!--<item-->
+        <!--android:id="@+id/action_settings"-->
+        <!--android:icon="@drawable/ic_settings_black_24dp"-->
+        <!--android:title="Settings">-->
+    <!--</item>-->
 </menu>

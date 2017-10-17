@@ -15,7 +15,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Pass
 
     private static final String TAG = "MainActivity";
 
-    private BottomNavigationView bottomNavigationView;
     private SectionsPagerAdapter sectionsPagerAdapter;
 
     @Override
@@ -25,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Pass
 
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView);
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView);
 
         // Add bottomNavView item click listener
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -41,9 +40,9 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Pass
                     case R.id.action_analysis:
                         switchFragment(2);
                         return true;
-                    case R.id.action_settings:
-                        switchFragment(3);
-                        return true;
+//                    case R.id.action_settings:
+//                        switchFragment(3);
+//                        return true;
                 }
                 return false;
             }
@@ -63,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Pass
         sectionsPagerAdapter.addFragment(new HomeFragment());
         sectionsPagerAdapter.addFragment(new CalendarFragment());
         sectionsPagerAdapter.addFragment(new AnalysisFragment());
-        sectionsPagerAdapter.addFragment(new SettingsFragment());
+//        sectionsPagerAdapter.addFragment(new SettingsFragment());
         sectionsPagerAdapter.addFragment(new NewEntryFragment());
     }
 
@@ -74,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Pass
     }
 
     public void passID(long id, boolean toView) {
-        if (toView == true) {
+        if (toView) {
             ExpenseInfoFragment expenseInfoFragment = (ExpenseInfoFragment) getSupportFragmentManager().findFragmentByTag("ExpenseInfoFragment");
             if (expenseInfoFragment == null) {
                 expenseInfoFragment = new ExpenseInfoFragment();
@@ -105,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Pass
 
     @Override
     public void PassDate(String date, int year, int month, int day, boolean toHome) {
-        if (toHome == true) {
+        if (toHome) {
             HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag("HomeFragment");
             if (homeFragment == null) {
                 homeFragment = new HomeFragment();

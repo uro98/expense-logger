@@ -5,18 +5,18 @@
         android:title="@string/hint_category">
 
         <EditTextPreference
-            android:key="edittext_preference"
+            android:key="add_category_preference"
             android:title="@string/add_category"
-            android:dialogTitle="@string/budget_edittext">
+            android:dialogTitle="@string/category_name">
 
         </EditTextPreference>
 
-        <EditTextPreference
-            android:key="edittext_preference"
+        <ListPreference
+            android:key="modify_category_preference"
             android:title="@string/modify_category"
-            android:dialogTitle="@string/budget_edittext">
+            android:dialogTitle="@string/modify_category">
 
-        </EditTextPreference>
+        </ListPreference>
 
         <EditTextPreference
             android:key="edittext_preference"
