@@ -52,6 +52,7 @@ public class HomeFragment extends Fragment {
     private int year;
     private int month;
     private int day;
+    private Cursor cursor;
 
     public interface PassDataListener {
         public void passID(long id, boolean toView);
@@ -211,6 +212,13 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
+    public void onStop() {
+        Log.d(TAG, "onStop: ");
+        cursor.close();
+        super.onStop();
+    }
+
+    @Override
     public void onDestroyView() {
         Log.d(TAG, "onDestroyView: ");
         super.onDestroyView();
@@ -219,7 +227,7 @@ public class HomeFragment extends Fragment {
 
     private void populateListView(String date) {
         // Get expenses
-        Cursor cursor = databaseHandler.getExpense(date);
+        cursor = databaseHandler.getExpense(date);
 
         // Create and set ListAdapter
         ExpenseListAdapter expenseListAdapter = new ExpenseListAdapter(getActivity(), cursor);

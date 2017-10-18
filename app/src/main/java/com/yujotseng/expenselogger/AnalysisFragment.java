@@ -11,12 +11,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-/**
- * piechart: category + percentage ((category expense list) list with amount below), can pick %/$
- * barchart: time + amount
- * list top expenses
- */
-
 public class AnalysisFragment extends Fragment {
     private static final String TAG = "AnalysisFragment";
 

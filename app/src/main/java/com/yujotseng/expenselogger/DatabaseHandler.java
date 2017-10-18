@@ -9,12 +9,11 @@ import android.support.design.widget.TabLayout;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-    // todo: check memory leak, (fragment navigation/stack)
-    // todo: update: amount in/under calendar, category management, icons
-    // todo: settings(budget), delete warning, edittext, reminders, recurring payment, photos
+    // todo: possible update: amount in/under calendar, category management, icons, (fragment navigation/stack)
+    // todo: possible update: settings(budget), delete warning, edittext(validation/expense info frag), reminders, recurring payment, photos
 
     // Database info
-    private static final int DATABASE_VERSION = 17;
+    private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "expense.db";
 
     // Tables
