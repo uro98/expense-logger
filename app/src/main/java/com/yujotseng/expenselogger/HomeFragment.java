@@ -68,7 +68,7 @@ public class HomeFragment extends Fragment {
         calendar = Calendar.getInstance();
 
         // Instantiate database
-        databaseHandler = new DatabaseHandler(getActivity());
+        databaseHandler = DatabaseHandler.getInstance(getActivity());
 
         // Get UI
         date = (TextView) view.findViewById(R.id.date);
@@ -116,8 +116,6 @@ public class HomeFragment extends Fragment {
                 int newDay = cal.get(Calendar.DAY_OF_MONTH);
                 newMonth++;    // MONTH starts from 0
                 String newDate = newDay + "/" + newMonth + "/" + newYear;
-
-                Log.d(TAG, "onClick: " + newDate);
 
                 date.setText(newDate + "\n" + getDayFromDate(newYear, newMonth, newDay));
 
@@ -212,15 +210,9 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public void onStop() {
-        Log.d(TAG, "onStop: ");
-        cursor.close();
-        super.onStop();
-    }
-
-    @Override
     public void onDestroyView() {
-        Log.d(TAG, "onDestroyView: ");
+        cursor.close();
+        databaseHandler.close();
         super.onDestroyView();
         view = null;
     }

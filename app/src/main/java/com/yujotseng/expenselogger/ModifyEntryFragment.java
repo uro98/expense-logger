@@ -30,8 +30,6 @@ public class ModifyEntryFragment extends Fragment {
     public final static String EXPENSE_ID = "id";
     
     private View view;
-    private Button saveUpdateButton;
-    private Button cancelButton;
     private TextView expenseCategoryUpdateInput;
     private EditText expenseAmountUpdateInput;
     private TextView expenseDateUpdateInput;
@@ -48,15 +46,15 @@ public class ModifyEntryFragment extends Fragment {
         view = inflater.inflate(R.layout.modify_entry_layout, container, false);
 
         // Instantiate database
-        databaseHandler = new DatabaseHandler(getActivity());
+        databaseHandler = DatabaseHandler.getInstance(getActivity());
 
         // Get UI
         expenseCategoryUpdateInput = (TextView) view.findViewById(R.id.expenseCategoryUpdateInput);
         expenseAmountUpdateInput = (EditText) view.findViewById(R.id.expenseAmountUpdateInput);
         expenseDateUpdateInput = (TextView)  view.findViewById(R.id.expenseDateUpdateInput);
         expenseNoteUpdateInput = (EditText) view.findViewById(R.id.expenseNoteUpdateInput);
-        saveUpdateButton = (Button) view.findViewById(R.id.saveUpdateButton);
-        cancelButton = (Button) view.findViewById(R.id.cancelButton);
+        Button saveUpdateButton = (Button) view.findViewById(R.id.saveUpdateButton);
+        Button cancelButton = (Button) view.findViewById(R.id.cancelButton);
 
         // Get HomeFragment
         fragment = getFragmentManager().findFragmentByTag("HomeFragment");
@@ -157,7 +155,6 @@ public class ModifyEntryFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        Log.d(TAG, "onDestroyView: ");
         super.onDestroyView();
         view = null;
     }

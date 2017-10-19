@@ -41,7 +41,7 @@ public class PieChartFragment extends Fragment {
     private NumberFormat numberFormat;
     private double totalMonthAmount;
 
-    // todo: overlap, (category on click list)
+    // todo: overlap, (show list on category click)
 
     @Nullable
     @Override
@@ -49,7 +49,7 @@ public class PieChartFragment extends Fragment {
         view = inflater.inflate(R.layout.pie_chart_layout, container, false);
 
         // Instantiate database
-        databaseHandler = new DatabaseHandler(getActivity());
+        databaseHandler = DatabaseHandler.getInstance(getActivity());
 
         // Get UI
         final TextView pieChartDate = view.findViewById(R.id.pieChartDate);
@@ -121,7 +121,6 @@ public class PieChartFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        Log.d(TAG, "onDestroyView: ");
         super.onDestroyView();
         view = null;
     }

@@ -32,7 +32,6 @@ public class NewEntryFragment extends Fragment {
     public static final String DATE = "_date";
     
     private View view;
-    private Button saveButton;
     private TextView expenseCategoryInput;
     private EditText expenseAmountInput;
     private TextView expenseDateInput;
@@ -49,14 +48,14 @@ public class NewEntryFragment extends Fragment {
         view = inflater.inflate(R.layout.new_entry_layout, container, false);
 
         // Instantiate database
-        databaseHandler = new DatabaseHandler(getActivity());
+        databaseHandler = DatabaseHandler.getInstance(getActivity());
 
         // Get UI
         expenseCategoryInput = (TextView) view.findViewById(R.id.expenseCategoryInput);
         expenseAmountInput = (EditText) view.findViewById(R.id.expenseAmountInput);
         expenseDateInput = (TextView) view.findViewById(R.id.expenseDateInput);
         expenseNoteInput = (EditText) view.findViewById(R.id.expenseNoteInput);
-        saveButton = (Button) view.findViewById(R.id.saveButton);
+        Button saveButton = (Button) view.findViewById(R.id.saveButton);
 
         // Get HomeFragment
         fragment = getFragmentManager().findFragmentByTag("HomeFragment");
@@ -126,7 +125,6 @@ public class NewEntryFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        Log.d(TAG, "onDestroyView: ");
         super.onDestroyView();
         view = null;
     }

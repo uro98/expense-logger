@@ -50,7 +50,7 @@ public class BarChartFragment extends Fragment {
         view = inflater.inflate(R.layout.bar_chart_layout, container, false);
 
         // Instantiate database
-        databaseHandler = new DatabaseHandler(getActivity());
+        databaseHandler = DatabaseHandler.getInstance(getActivity());
 
         // Get UI
         final TextView barChartDate = view.findViewById(R.id.barChartDate);
@@ -126,7 +126,6 @@ public class BarChartFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        Log.d(TAG, "onDestroyView: ");
         super.onDestroyView();
         view = null;
     }

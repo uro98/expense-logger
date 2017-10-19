@@ -40,7 +40,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onDestroyView() {
-        Log.d(TAG, "onDestroyView: ");
         super.onDestroyView();
         view = null;
     }

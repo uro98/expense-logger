@@ -30,7 +30,6 @@ public class ExpenseInfoFragment extends Fragment {
     private TextView expenseNoteDetail;
     private DatabaseHandler databaseHandler;
     private Fragment homeFragment;
-    private Fragment modifyEntryFragment;
     private long _id;
     private HomeFragment.PassDataListener callback;
 
@@ -41,7 +40,7 @@ public class ExpenseInfoFragment extends Fragment {
         view = inflater.inflate(R.layout.expense_info_layout, container, false);
 
         // Instantiate database
-        databaseHandler = new DatabaseHandler(getActivity());
+        databaseHandler = DatabaseHandler.getInstance(getActivity());
 
         // Get UI
         Button editButton = view.findViewById(R.id.editButton);
@@ -58,11 +57,6 @@ public class ExpenseInfoFragment extends Fragment {
         homeFragment = getFragmentManager().findFragmentByTag("HomeFragment");
         if(homeFragment == null) {
             homeFragment = new HomeFragment();
-        }
-
-        modifyEntryFragment = getFragmentManager().findFragmentByTag("ModifyEntryFragment");
-        if(modifyEntryFragment == null) {
-            modifyEntryFragment = new ModifyEntryFragment();
         }
 
         // Set buttons onClickListeners
@@ -113,6 +107,8 @@ public class ExpenseInfoFragment extends Fragment {
             NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
             String amount = numberFormat.format(amountModified);
 
+            cursor.close();
+
             // Populate TextViews with properties
             expenseCategoryDetail.setText(category);
             expenseAmountDetail.setText(amount);
@@ -134,7 +130,6 @@ public class ExpenseInfoFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        Log.d(TAG, "onDestroyView: ");
         super.onDestroyView();
         view = null;
     }

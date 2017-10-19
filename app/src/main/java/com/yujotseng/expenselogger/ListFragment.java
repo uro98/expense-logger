@@ -38,7 +38,7 @@ public class ListFragment extends Fragment {
         view = inflater.inflate(R.layout.list_layout, container, false);
 
         // Instantiate database
-        databaseHandler = new DatabaseHandler(getActivity());
+        databaseHandler = DatabaseHandler.getInstance(getActivity());
 
         // Get UI
         SearchView searchView = view.findViewById(R.id.searchView);
@@ -77,7 +77,6 @@ public class ListFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        Log.d(TAG, "onDestroyView: ");
         super.onDestroyView();
         view = null;
     }

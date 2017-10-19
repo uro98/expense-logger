@@ -12,6 +12,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // todo: possible update: amount in/under calendar, category management, icons, (fragment navigation/stack)
     // todo: possible update: settings(budget), delete warning, edittext(validation/expense info frag), reminders, recurring payment, photos
 
+    private static DatabaseHandler databaseHandler;
+
     // Database info
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "expense.db";
@@ -43,7 +45,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             COLUMN_CATEGORY + " TEXT PRIMARY KEY NOT NULL " +
             ");";
 
-    public DatabaseHandler(Context context) {
+    public static DatabaseHandler getInstance(Context context) {
+        if (databaseHandler == null) {
+            databaseHandler = new DatabaseHandler(context.getApplicationContext());
+        }
+        return databaseHandler;
+    }
+
+    private DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -173,7 +182,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         };
 
         String selection = COLUMN_DATE + " LIKE ?";
-        String[] selectionArgs = { "%" + month + "/" + year };
+        String[] selectionArgs = { "%" + "/" + month + "/" + year };
 
         Cursor cursor = sqLiteDatabase.query(TABLE_EXPENSE, projection, selection, selectionArgs, null, null, null);
 
